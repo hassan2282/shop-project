@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('auth')->namespace('Auth')->group(function() {
-    auth()->loginUsingId(1);
     Route::middleware('guest')->group(function() {
         /* register a user */
         Route::get('/registerForm', [RegisterController::class, 'registerForm'])->name('auth.registerForm');

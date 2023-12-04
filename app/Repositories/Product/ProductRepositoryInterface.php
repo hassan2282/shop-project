@@ -9,4 +9,6 @@ interface ProductRepositoryInterface
     public function getCategories();
 
     public function getBrands();
+
+    public function create($inputs, $image);
 }

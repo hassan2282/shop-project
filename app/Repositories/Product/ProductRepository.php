@@ -26,4 +26,9 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return Brand::get(['id','name']);
     }
+
+    public function create($inputs, $image)
+    {
+        return Product::create($inputs);
+    }
 }
