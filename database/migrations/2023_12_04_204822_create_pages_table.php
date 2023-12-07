@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('body');
-            $table->string('slug')->unique();
+            $table->string('slug')->unique()->nullable();
             $table->tinyInteger('status')->default(0);
             $table->string('tags');
             $table->softDeletes();
