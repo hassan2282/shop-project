@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menus', function (Blueprint $table) {
+        Schema::create('category_attributes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->tinyInteger('status')->default(0);
-            $table->text('url');
-            $table->foreignId('parent_id')->nullable()->constrained('menus');
-            $table->softDeletes();
+            $table->tinyInteger('type')->default(0);
+            $table->string('unit');
+            $table->foreignId('category_id')->constrained('product_categories');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menus');
+        Schema::dropIfExists('category_attributes');
     }
 };
