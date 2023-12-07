@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('ticket_files', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->tinyInteger('status');
+            $table->text('file_path');
+            $table->bigInteger('file_size');
+            $table->string('file_type');
+            $table->foreignId('ticket_id')->constrained('tickets');
+            $table->foreignId('user_id')->constrained('users');
+            $table->tinyInteger('status')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('ticket_files');
     }
 };
