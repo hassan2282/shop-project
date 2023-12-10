@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('deliver', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->decimal(20, 3)->nullable()->comment('nullable => free delivery');
+            $table->integer('delivery_time_unit')->nullable();
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
