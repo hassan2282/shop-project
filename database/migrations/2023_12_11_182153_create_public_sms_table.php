@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('deliver', function (Blueprint $table) {
+        Schema::create('public_sms', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal(20, 3)->nullable()->comment('nullable => free delivery');
-            $table->integer('delivery_time_unit')->nullable();
+            $table->string('title');
+            $table->text('body');
             $table->tinyInteger('status')->default(0);
+            $table->timestamp('published_at');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('deliver');
+        Schema::dropIfExists('public_sms');
     }
 };

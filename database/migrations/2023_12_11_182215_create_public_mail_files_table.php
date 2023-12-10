@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('deliver', function (Blueprint $table) {
+        Schema::create('public_mail_files', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal(20, 3)->nullable()->comment('nullable => free delivery');
-            $table->integer('delivery_time_unit')->nullable();
+            $table->text('file_path');
+            $table->string('file_type');
+            $table->bigInteger('file_size');
+            $table->foreignId('public_mail_id')->constrained('public_mail');
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('deliver');
+        Schema::dropIfExists('public_mail_files');
     }
 };
