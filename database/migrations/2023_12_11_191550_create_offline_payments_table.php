@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('offline_payments', function (Blueprint $table) {
             $table->id();
+            $table->decimal('amount', 20, 3);
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('transaction_id')->nullable();
+            $table->timestamp('pay_date');
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -22,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('offline_payments');
     }
 };
