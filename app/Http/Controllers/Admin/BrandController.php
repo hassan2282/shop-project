@@ -18,27 +18,30 @@ class BrandController extends Controller
     }
 
 
-
     public function create()
     {
         return view('admin.brand.create');
     }
 
 
-
     public function store(brandStoreRequest $request, SaveImage $saveImage)
     {
         $inputs = $request->all();
-
         $image = $request->file('logo');
         $saveImage->save($image, 'Brands');
         $inputs['logo'] = $saveImage->saveImageDb();
-
-        Brand::create($inputs);
-        return to_route('admin.brand.index')->with('alert-success', 'برند شما با موفقیت اضافه شد!');
+        $brand = Brand::create([
+            'persian_name' => $request->name,
+            'description' => $request->description,
+            'status' => $request->status,
+            'logo' => $saveImage->saveImageDb(),
+        ]);
+        if ($brand) {
+            return to_route('admin.brand.index')->with('alert-success', 'برند شما با موفقیت اضافه شد!');
+        } else {
+            return back()->withInput();
+        }
     }
-
-
 
 
     public function edit(Brand $brand)
@@ -51,8 +54,7 @@ class BrandController extends Controller
     {
         $inputs = $brandRequest->all();
 
-        if($brandRequest->hasFile('logo'))
-        {
+        if ($brandRequest->hasFile('logo')) {
             File::delete(public_path($brand->logo));
             $image = $brandRequest->file('logo');
             $saveImage->save($image, 'Brands');
@@ -73,7 +75,8 @@ class BrandController extends Controller
 
 
     /* -- change status -- */
-    public function status(Brand $brand) {
+    public function status(Brand $brand)
+    {
         $brand->status = $brand->status == 1 ? 0 : 1;
         $brand->save();
         return to_route('admin.brand.index')->with('alert-success', 'وضعیت برند شما با موفقیت تغییر کرد !');

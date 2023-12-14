@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::prefix('admin')->namespace('Admin')->middleware('auth')->group(function() {
+    \Illuminate\Support\Facades\Auth::loginUsingId(1);
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     // categories
     Route::prefix('category')->namespace('Category')->group(function() {

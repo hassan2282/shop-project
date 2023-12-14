@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('amount', 20, 3);
             $table->foreignId('user_id')->constrained('users');
-            $table->unsignedBigInteger('paymentable_id');
-            $table->string('paymentable_type');
+            $table->morphs('paymentable');
             $table->tinyInteger('type')->default(0)->comment('0 => online, 1 => offline, 2 => cash');
             $table->tinyInteger('status')->default(0);
             $table->timestamps();

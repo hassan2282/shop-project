@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\File;
 class ProductController extends Controller
 {
     public function __construct(ProductRepositoryInterface $productRepository,
-                                ProductService $productService)
+                                ProductService             $productService)
     {
         $this->productRepository = $productRepository;
         $this->productService = $productService;
