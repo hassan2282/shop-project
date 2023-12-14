@@ -19,8 +19,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(0);
             $table->foreignId('parent_id')->nullable()->constrained('comments');
             $table->foreignId('user_id')->constrained('users');
-            $table->unsignedBigInteger('commentable_id');
-            $table->string('commentable_type');
+            $table->morphs('commentable');
             $table->softDeletes();
             $table->timestamps();
         });
