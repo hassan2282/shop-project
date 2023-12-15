@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\File;
 
 class BrandController extends Controller
 {
+    public function __construct()
+    {
+    }
+
     public function index()
     {
         $brands = Brand::Paginate(10);
@@ -26,10 +30,7 @@ class BrandController extends Controller
 
     public function store(brandStoreRequest $request, SaveImage $saveImage)
     {
-        $inputs = $request->all();
-        $image = $request->file('logo');
-        $saveImage->save($image, 'Brands');
-        $inputs['logo'] = $saveImage->saveImageDb();
+
         $brand = Brand::create([
             'persian_name' => $request->name,
             'description' => $request->description,

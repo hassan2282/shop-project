@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('original_name')->nullable();
             $table->text('description');
             $table->text('logo');
-            $table->string('tags');
+            $table->string('tags')->nullable();
             $table->string('slug')->unique()->nullable();
             $table->string('status')->default(0);
             $table->timestamps();
