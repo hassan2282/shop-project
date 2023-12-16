@@ -6,18 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Brand\brandStoreRequest;
 use App\Http\Requests\Admin\Brand\brandUpdateRequest;
 use App\Models\Admin\Brand;
+use App\Repositories\Brand\BrandRepositoryInterface;
 use App\Services\SaveImage;
 use Illuminate\Support\Facades\File;
 
 class BrandController extends Controller
 {
-    public function __construct()
+    public function __construct(BrandRepositoryInterface $brandRepository)
     {
+        $this->brandRepository = $brandRepository;
     }
 
     public function index()
     {
-        $brands = Brand::Paginate(10);
+        $brands = $this->brandRepository->index();
         return view('admin.brand.index', compact('brands'));
     }
 
@@ -30,13 +32,7 @@ class BrandController extends Controller
 
     public function store(brandStoreRequest $request)
     {
-
-        $brand = Brand::create([
-            'persian_name' => $request->name,
-            'description' => $request->description,
-            'status' => $request->status,
-            'logo' => '',
-        ]);
+        $brand = $this->brandRepository->create($request);
         if ($brand) {
             return to_route('admin.brand.index')->with('alert-success', 'برند شما با موفقیت اضافه شد!');
         } else {
@@ -51,26 +47,17 @@ class BrandController extends Controller
     }
 
 
-    public function update(Brand $brand, brandUpdateRequest $brandRequest)
+    public function update(Brand $brand, brandUpdateRequest $request)
     {
-        $inputs = $brandRequest->all();
 
-        if ($brandRequest->hasFile('logo')) {
-            File::delete(public_path($brand->logo));
-            $image = $brandRequest->file('logo');
-//            $saveImage->save($image, 'Brands');
-//            $inputs['logo'] = $saveImage->saveImageDb();
-        }
-
-        $brand->update($inputs);
+        $this->brandRepository->update($brand, $request);
         return to_route('admin.brand.index')->with('alert-success', 'برند شما با موفقیت ویرایش شد!');
     }
 
 
     public function delete(Brand $brand)
     {
-        File::delete(public_path($brand->logo));
-        $brand->delete();
+        $this->brandRepository->delete($brand);
         return back();
     }
 
@@ -78,8 +65,7 @@ class BrandController extends Controller
     /* -- change status -- */
     public function status(Brand $brand)
     {
-        $brand->status = $brand->status == 1 ? 0 : 1;
-        $brand->save();
+        $this->brandRepository->status($brand);
         return to_route('admin.brand.index')->with('alert-success', 'وضعیت برند شما با موفقیت تغییر کرد !');
     }
 
