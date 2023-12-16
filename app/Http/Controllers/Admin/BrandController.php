@@ -28,14 +28,14 @@ class BrandController extends Controller
     }
 
 
-    public function store(brandStoreRequest $request, SaveImage $saveImage)
+    public function store(brandStoreRequest $request)
     {
 
         $brand = Brand::create([
             'persian_name' => $request->name,
             'description' => $request->description,
             'status' => $request->status,
-            'logo' => $saveImage->saveImageDb(),
+            'logo' => '',
         ]);
         if ($brand) {
             return to_route('admin.brand.index')->with('alert-success', 'برند شما با موفقیت اضافه شد!');
@@ -51,15 +51,15 @@ class BrandController extends Controller
     }
 
 
-    public function update(Brand $brand, brandUpdateRequest $brandRequest, SaveImage $saveImage)
+    public function update(Brand $brand, brandUpdateRequest $brandRequest)
     {
         $inputs = $brandRequest->all();
 
         if ($brandRequest->hasFile('logo')) {
             File::delete(public_path($brand->logo));
             $image = $brandRequest->file('logo');
-            $saveImage->save($image, 'Brands');
-            $inputs['logo'] = $saveImage->saveImageDb();
+//            $saveImage->save($image, 'Brands');
+//            $inputs['logo'] = $saveImage->saveImageDb();
         }
 
         $brand->update($inputs);
