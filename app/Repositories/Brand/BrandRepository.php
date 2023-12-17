@@ -12,6 +12,7 @@ class BrandRepository implements BrandRepositoryInterface
         return Brand::Paginate(15);
     }
 
+
     public function store($request)
     {
         return Brand::create([
