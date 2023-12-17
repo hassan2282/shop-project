@@ -7,14 +7,17 @@ use App\Http\Requests\Admin\Brand\brandStoreRequest;
 use App\Http\Requests\Admin\Brand\brandUpdateRequest;
 use App\Models\Admin\Brand;
 use App\Repositories\Brand\BrandRepositoryInterface;
+use App\Services\BrandService;
 use App\Services\SaveImage;
 use Illuminate\Support\Facades\File;
 
 class BrandController extends Controller
 {
-    public function __construct(BrandRepositoryInterface $brandRepository)
+    public function __construct(BrandRepositoryInterface $brandRepository,
+                                BrandService             $brandService)
     {
         $this->brandRepository = $brandRepository;
+        $this->brandService = $brandService;
     }
 
     public function index()
@@ -32,12 +35,13 @@ class BrandController extends Controller
 
     public function store(brandStoreRequest $request)
     {
-        $brand = $this->brandRepository->create($request);
-        if ($brand) {
-            return to_route('admin.brand.index')->with('alert-success', 'برند شما با موفقیت اضافه شد!');
-        } else {
-            return back()->withInput();
-        }
+        $brand = $this->brandRepository->store($request);
+        $this->brandService->store($brand, $request);
+//        if ($brand) {
+//            return to_route('admin.brand.index')->with('alert-success', 'برند شما با موفقیت اضافه شد!');
+//        } else {
+//            return back()->withInput();
+//        }
     }
 
 

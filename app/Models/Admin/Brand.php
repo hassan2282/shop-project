@@ -10,13 +10,13 @@ class Brand extends Model
 {
     use HasFactory, Sluggable;
 
-    protected $fillable = ['name', 'description', 'status', 'logo', 'slug'];
+    protected $fillable = ['persian_name', 'description', 'status', 'logo', 'slug'];
 
     public function sluggable(): array
     {
         return [
             'slug' => [
-                'source' => 'name'
+                'source' => 'persian_name'
             ]
         ];
     }

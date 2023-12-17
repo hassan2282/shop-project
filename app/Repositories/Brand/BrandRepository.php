@@ -5,16 +5,16 @@ namespace App\Repositories\Brand;
 use App\Models\Admin\Brand;
 use Illuminate\Support\Facades\File;
 
-class BrandRepository
+class BrandRepository implements BrandRepositoryInterface
 {
     public function index()
     {
         return Brand::Paginate(15);
     }
 
-    public function create($request)
+    public function store($request)
     {
-        $brand = Brand::create([
+        return Brand::create([
             'persian_name' => $request->name,
             'description' => $request->description,
             'status' => $request->status,

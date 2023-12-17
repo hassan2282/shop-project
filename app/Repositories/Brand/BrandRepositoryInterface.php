@@ -6,7 +6,7 @@ interface BrandRepositoryInterface
 {
     public function index();
 
-    public function create($request);
+    public function store($request);
 
     public function update($brand, $request);
 
