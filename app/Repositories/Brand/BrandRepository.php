@@ -21,6 +21,7 @@ class BrandRepository implements BrandRepositoryInterface
             'status' => $request->status,
             'logo' => '',
         ]);
+
     }
 
     public function update($brand, $request)
