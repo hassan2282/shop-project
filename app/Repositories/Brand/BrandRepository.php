@@ -13,13 +13,13 @@ class BrandRepository implements BrandRepositoryInterface
     }
 
 
-    public function store($request)
+    public function store($request, $image_name)
     {
         return Brand::create([
             'persian_name' => $request->name,
             'description' => $request->description,
             'status' => $request->status,
-            'logo' => '',
+            'logo' => $image_name,
         ]);
 
     }

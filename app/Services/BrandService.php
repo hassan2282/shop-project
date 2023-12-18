@@ -16,6 +16,9 @@ class BrandService
 
     public function store($request)
     {
-        return $this->brandRepository->store($request);
+        $logo = $request->file('logo');
+        $image_name = time() . '-' . trim($logo->getClientOriginalName());
+        $logo->move('adm/products/images', $image_name);
+        return $this->brandRepository->store($request, $image_name);
     }
 }
