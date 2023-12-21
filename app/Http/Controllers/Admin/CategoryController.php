@@ -40,9 +40,7 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        //   مشکل براش پیش آمده
         $allCategories = $this->categoryService->all();
-//        $allCategories = $this->categoryRepository->getAllCategories($category);
         return view('admin.category.edit', compact('category', 'allCategories'));
     }
 

@@ -25,9 +25,4 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         return (new CategoryFilter($queryParams, 15))->getResult();
     }
 
-//    public function getAllCategories($category)
-//    {
-//        return Category::select(['id', 'name'])->whereNot('id', $category->id)->get();
-//    }
-
 }

@@ -8,5 +8,4 @@ interface CategoryRepositoryInterface extends EloquentRepositoryInterface
 {
     public function getAllCategoriesByFilters();
 
-//    public function getAllCategories($category);
 }
