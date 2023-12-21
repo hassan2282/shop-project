@@ -18,7 +18,7 @@ class CategoryService extends BaseRepository
 
     public function all(): Collection
     {
-        return $this->allWithPaginate();
+        return $this->model->all('id','name');
     }
     public function status($category)
     {
@@ -26,13 +26,18 @@ class CategoryService extends BaseRepository
         $category->save();
     }
 
-    public function store($request): Category
+    public function create(array $attributes): Category
     {
-        return $this->store($request);
+        return $this->model->create($attributes);
     }
 
-    public function update($attributes, $id): bool
+    public function update(array $attributes, $id): bool
     {
-        return $this->update($attributes, $id);
+        return $this->model->update($attributes, $id);
+    }
+
+    public function delete($id)
+    {
+        return $this->model->delete($id);
     }
 }

@@ -25,33 +25,9 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         return (new CategoryFilter($queryParams, 15))->getResult();
     }
 
-    public function createData()
-    {
-        return Category::all('id','name');
-    }
-
-//    public function store($request)
-//    {
-//        $inputs = $request->all();
-//        Category::create($inputs);
-//    }
-
 //    public function getAllCategories($category)
 //    {
 //        return Category::select(['id', 'name'])->whereNot('id', $category->id)->get();
 //    }
-//    public function update($category, $categoryRequest)
-//    {
-//        $category->update([
-//            'name' => $categoryRequest->name,
-//            'description' => $categoryRequest->description,
-//            'status' => $categoryRequest->status,
-//            'parent_id' => $categoryRequest->parent_id,
-//        ]);
-//    }
 
-//    public function delete($category)
-//    {
-//        $category->delete();
-//    }
 }
