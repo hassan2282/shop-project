@@ -6,8 +6,8 @@ use App\Repositories\EloquentRepositoryInterface;
 
 interface CategoryRepositoryInterface extends EloquentRepositoryInterface
 {
-//    public function getAllCategoriesByFilters();
-//    public function createData();
+    public function getAllCategoriesByFilters();
+    public function createData();
 
 //    public function store($request);
 //

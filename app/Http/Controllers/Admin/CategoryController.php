@@ -40,13 +40,14 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        $allCategories = $this->categoryRepository->getAllCategories($category);
+        $allCategories = $this->categoryService->all();
+//        $allCategories = $this->categoryRepository->getAllCategories($category);
         return view('admin.category.edit', compact('category', 'allCategories'));
     }
 
-    public function update(CategoryUpdateRequest $categoryRequest, $id)
+    public function update(CategoryUpdateRequest $request, $id)
     {
-        $this->categoryRepository->update($categoryRequest->toArray(), $id);
+        $this->categoryService->update($request->toArray(), $id);
         return to_route('admin.category.index')->with('alert-success', 'دسته بندی شما با موفقیت ویرایش شد');
     }
 
