@@ -28,13 +28,13 @@ class CategoryController extends Controller
 
     public function create()
     {
-        $categories = $this->categoryRepository->create();
+        $categories = $this->categoryRepository->createData();
         return view('admin.category.create', compact('categories'));
     }
 
     public function store(CategoryStoreRequest $request)
     {
-        $this->categoryRepository->store($request);
+        return $this->categoryService->store($request);
         return to_route('admin.category.index')->with('alert-success', 'دسته بندی شما با موفقیت اضافه شد');
     }
 
@@ -44,9 +44,9 @@ class CategoryController extends Controller
         return view('admin.category.edit', compact('category', 'allCategories'));
     }
 
-    public function update(Category $category, CategoryUpdateRequest $categoryRequest)
+    public function update(CategoryUpdateRequest $categoryRequest, $id)
     {
-        $this->categoryRepository->update($category, $categoryRequest);
+        $this->categoryRepository->update($categoryRequest->toArray(), $id);
         return to_route('admin.category.index')->with('alert-success', 'دسته بندی شما با موفقیت ویرایش شد');
     }
 

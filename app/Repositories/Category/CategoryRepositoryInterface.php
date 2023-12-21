@@ -2,18 +2,18 @@
 
 namespace App\Repositories\Category;
 
-interface CategoryRepositoryInterface
+use App\Repositories\EloquentRepositoryInterface;
+
+interface CategoryRepositoryInterface extends EloquentRepositoryInterface
 {
-    public function searchData();
+//    public function getAllCategoriesByFilters();
+//    public function createData();
 
-    public function getAllCategoriesByFilters();
-    public function create();
-
-    public function store($request);
-
-    public function getAllCategories($category);
-
-    public function update($category, $categoryRequest);
-
-    public function delete($category);
+//    public function store($request);
+//
+//    public function getAllCategories($category);
+//
+//    public function update($category, $categoryRequest);
+//
+//    public function delete($category);
 }
