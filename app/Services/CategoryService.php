@@ -38,6 +38,6 @@ class CategoryService extends BaseRepository
 
     public function delete($id)
     {
-        return $this->model->delete($id);
+        return $this->find($id)->delete();
     }
 }
