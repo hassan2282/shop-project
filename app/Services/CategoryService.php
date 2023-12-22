@@ -4,10 +4,8 @@ namespace App\Services;
 
 use App\Models\Admin\Category;
 use App\Repositories\BaseRepository;
-use App\Repositories\Category\CategoryRepository;
-use App\Repositories\Category\CategoryRepositoryInterface;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use function Sodium\add;
 
 class CategoryService extends BaseRepository
 {
@@ -18,8 +16,9 @@ class CategoryService extends BaseRepository
 
     public function all(): Collection
     {
-        return $this->model->all('id','name');
+        return $this->model->all('id', 'name');
     }
+
     public function status($category)
     {
         $category->status = $category->status == 1 ? 0 : 1;
