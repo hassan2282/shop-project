@@ -2,15 +2,17 @@
 
 namespace App\Repositories\Brand;
 
-interface BrandRepositoryInterface
+use App\Repositories\EloquentRepositoryInterface;
+
+interface BrandRepositoryInterface extends EloquentRepositoryInterface
 {
-    public function index();
 
-    public function store($request, $image_name);
+//    public function store($request, $image_name);
+//
+//    public function update($brand, $request);
+//
+//    public function delete($brand);
+//
+//    public function status($brand);
 
-    public function update($brand, $request);
-
-    public function delete($brand);
-
-    public function status($brand);
 }

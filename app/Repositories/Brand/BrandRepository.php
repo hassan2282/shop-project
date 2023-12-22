@@ -3,15 +3,11 @@
 namespace App\Repositories\Brand;
 
 use App\Models\Admin\Brand;
+use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\File;
 
-class BrandRepository implements BrandRepositoryInterface
+class BrandRepository extends BaseRepository implements BrandRepositoryInterface
 {
-    public function index()
-    {
-        return Brand::Paginate(15);
-    }
-
 
     public function store($request, $image_name)
     {
@@ -24,17 +20,17 @@ class BrandRepository implements BrandRepositoryInterface
 
     }
 
-    public function update($brand, $request)
-    {
-        $inputs = $request->all();
-        if ($request->hasFile('logo')) {
-            File::delete(public_path($brand->logo));
-            $image = $request->file('logo');
-//            $saveImage->save($image, 'Brands');
-//            $inputs['logo'] = $saveImage->saveImageDb();
-        }
-        $brand->update($inputs);
-    }
+//    public function update($brand, $request)
+//    {
+//        $inputs = $request->all();
+//        if ($request->hasFile('logo')) {
+//            File::delete(public_path($brand->logo));
+//            $image = $request->file('logo');
+////            $saveImage->save($image, 'Brands');
+////            $inputs['logo'] = $saveImage->saveImageDb();
+//        }
+//        $brand->update($inputs);
+//    }
 
     public function delete($brand)
     {

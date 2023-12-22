@@ -8,8 +8,6 @@ use App\Http\Requests\Admin\Brand\brandUpdateRequest;
 use App\Models\Admin\Brand;
 use App\Repositories\Brand\BrandRepositoryInterface;
 use App\Services\BrandService;
-use App\Services\SaveImage;
-use Illuminate\Support\Facades\File;
 
 class BrandController extends Controller
 {
@@ -22,7 +20,7 @@ class BrandController extends Controller
 
     public function index()
     {
-        $brands = $this->brandRepository->index();
+        $brands = $this->brandRepository->all();
         return view('admin.brand.index', compact('brands'));
     }
 
@@ -37,7 +35,7 @@ class BrandController extends Controller
     {
         $brand = $this->brandService->store($request);
         if ($brand) {
-            return to_route('admin.brand.index')->with('alert-success', 'برند شما با موفقیت اضافه شد!');
+            return redirect('admin.brand.index')->with('alert-success', 'برند شما با موفقیت اضافه شد!');
         } else {
             return back()->withInput();
         }

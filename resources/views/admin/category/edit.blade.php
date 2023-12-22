@@ -36,24 +36,6 @@
           </div>
         </div>
 
-
-        <div class="mb-3 row">
-          <label class="col-md-2 col-form-label">تصویر</label>
-          <div class="col-md-10">
-            <input class="form-control mb-2" name="image" type="file" id="formFile">
-
-            <div>
-                <img class="mt-2 mb-5 w-50" src="{{ asset($category->image) }}" alt="">
-            </div>
-
-
-            @error('image')
-                <span class="text-danger mt-3">{{ $message }}</span>
-            @enderror
-          </div>
-        </div>
-
-
         <div class="mb-3 row">
           <label for="status" class="col-md-2 col-form-label">انتخاب وضعیت دسته بندی</label>
           <div class="col-md-10">

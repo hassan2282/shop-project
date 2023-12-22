@@ -46,8 +46,10 @@ class CategoryController extends Controller
 
     public function update(CategoryUpdateRequest $request, $id)
     {
-        $this->categoryService->update($request->toArray(), $id);
+        $update = $this->categoryService->update($request->toArray(), $id);
+        if ($update)
         return to_route('admin.category.index')->with('alert-success', 'دسته بندی شما با موفقیت ویرایش شد');
+        return to_route('admin.category.index')->with('alert-danger', 'متاسفانه خطایی رخ داده است');
     }
 
     public function delete($id)

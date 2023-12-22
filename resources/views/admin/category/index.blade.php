@@ -8,7 +8,13 @@
             </ul>
         </div>
     @endif
-
+    @if (Session::has('alert-danger'))
+        <div class="alert alert-danger">
+            <ul>
+                <li>{{ Session::get('alert-danger') }}</li>
+            </ul>
+        </div>
+    @endif
     <div class="card">
         <div class="card-header border-bottom">
             <h5 class="card-title mb-3">دسته بندی ها</h5>
