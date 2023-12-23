@@ -20,7 +20,7 @@ class BrandController extends Controller
 
     public function index()
     {
-        $brands = $this->brandRepository->all();
+        $brands = $this->brandRepository->allWithPaginate();
         return view('admin.brand.index', compact('brands'));
     }
 
@@ -35,7 +35,7 @@ class BrandController extends Controller
     {
         $brand = $this->brandService->store($request);
         if ($brand) {
-            return redirect('admin.brand.index')->with('alert-success', 'برند شما با موفقیت اضافه شد!');
+            return redirect(route('admin.brand.index'))->with('alert-success', 'برند شما با موفقیت اضافه شد!');
         } else {
             return back()->withInput();
         }
@@ -56,9 +56,9 @@ class BrandController extends Controller
     }
 
 
-    public function delete($id)
+    public function delete(Brand $brand)
     {
-        $this->brandRepository->delete($id);
+        $this->brandRepository->delete($brand);
         return back();
     }
 
