@@ -56,9 +56,9 @@ class BrandController extends Controller
     }
 
 
-    public function delete(Brand $brand)
+    public function delete($id)
     {
-        $this->brandRepository->delete($brand);
+        $this->brandRepository->delete($id);
         return back();
     }
 
