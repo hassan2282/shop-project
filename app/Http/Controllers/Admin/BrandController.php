@@ -20,7 +20,7 @@ class BrandController extends Controller
 
     public function index()
     {
-        $brands = $this->brandRepository->all();
+        $brands = $this->brandRepository->allWithPaginate();
         return view('admin.brand.index', compact('brands'));
     }
 

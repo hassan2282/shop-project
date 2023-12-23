@@ -4,10 +4,15 @@ namespace App\Repositories\Brand;
 
 use App\Models\Admin\Brand;
 use App\Repositories\BaseRepository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 
 class BrandRepository extends BaseRepository implements BrandRepositoryInterface
 {
+    public function __construct(Brand $brand)
+    {
+        parent::__construct($brand);
+    }
 
     public function store($request, $image_name)
     {
