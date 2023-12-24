@@ -37,7 +37,9 @@
                             <td>{{ Str::limit($brand->description, 10, ' ...') }}</td>
 
                             <td>
-                                <img width="100" height="50" src="{{ asset('/adm/products/images/'. $brand->logo) }}">
+                                @if($brand->media)
+                                    <img width="100" height="50" src="{{ asset('storage/app/public/' . $brand->media->name) }}">
+                                @endif
                             </td>
 
 
