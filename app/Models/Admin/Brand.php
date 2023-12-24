@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Models\Media;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ class Brand extends Model
 {
     use HasFactory, Sluggable;
 
-    protected $fillable = ['persian_name', 'description', 'status', 'logo', 'slug'];
+    protected $guarded = ['id'];
 
     public function sluggable(): array
     {
@@ -21,7 +22,10 @@ class Brand extends Model
         ];
     }
 
-
+    public function media()
+    {
+        return $this->morphOne(Media::class, 'mediable');
+    }
 
     public function products()
     {

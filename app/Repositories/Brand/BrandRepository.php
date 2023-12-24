@@ -14,17 +14,6 @@ class BrandRepository extends BaseRepository implements BrandRepositoryInterface
         parent::__construct($brand);
     }
 
-    public function store($request, $image_name)
-    {
-        return Brand::create([
-            'persian_name' => $request->name,
-            'description' => $request->description,
-            'status' => $request->status,
-            'logo' => $image_name,
-        ]);
-
-    }
-
 //    public function update($brand, $request)
 //    {
 //        $inputs = $request->all();

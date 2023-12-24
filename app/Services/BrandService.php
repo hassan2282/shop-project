@@ -4,24 +4,40 @@ namespace App\Services;
 
 use App\Models\Admin\Brand;
 use App\Repositories\BaseRepository;
-use App\Repositories\Brand\BrandRepository;
 use App\Repositories\Brand\BrandRepositoryInterface;
-use Illuminate\Support\Collection;
+use App\Repositories\Media\MediaRepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 
 class BrandService extends BaseRepository
 {
     protected BrandRepositoryInterface $brandRepository;
+    protected MediaRepositoryInterface $mediaRepository;
+
     public function __construct(Brand $brand)
     {
         parent::__construct($brand);
         $this->brandRepository = app()->make(BrandRepositoryInterface::class);
+        $this->mediaRepository = app()->make(MediaRepositoryInterface::class);
     }
 
-    public function store($request)
+    public function store($request): Model
     {
-        $logo = $request->file('logo');
-        $image_name = time() . '-' . trim($logo->getClientOriginalName());
-        $logo->move('adm/products/images', $image_name);
-        return $this->brandRepository->store($request, $image_name);
+        $brand =  $this->brandRepository->create(attributes: $request->toArray());
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $name = time() . trim($file->getClientOriginalName());
+            $file->storeAs('public/', $name);
+
+            $media = [
+                'name' => $name,
+                'mimetype' => $file->getClientOriginalExtension(),
+                'size' => $file->getSize(),
+                'mediable_type' => Brand::class,
+                'mediable_id' => $brand->id,
+            ];
+
+            $this->mediaRepository->create(attributes: $media);
+            return $brand;
+        }
     }
 }
