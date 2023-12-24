@@ -11,4 +11,9 @@ class Media extends Model
     protected $guarded = [
       'id'
     ];
+
+    public function mediable()
+    {
+        return $this->morphTo();
+    }
 }
