@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Category\CategoryStoreRequest;
 use App\Http\Requests\Admin\Category\CategoryUpdateRequest;
 use App\Models\Admin\Category;
-use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Services\CategoryService;
 
@@ -40,13 +39,13 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        $allCategories = $this->categoryService->all();
+        $allCategories = $this->categoryRepository->all();
         return view('admin.category.edit', compact('category', 'allCategories'));
     }
 
     public function update(CategoryUpdateRequest $request, $id)
     {
-        $update = $this->categoryService->update($request->toArray(), $id);
+        $update = $this->categoryRepository->update($request->toArray(), $id);
         if ($update)
         return to_route('admin.category.index')->with('alert-success', 'دسته بندی شما با موفقیت ویرایش شد');
         return to_route('admin.category.index')->with('alert-danger', 'متاسفانه خطایی رخ داده است');
@@ -54,7 +53,7 @@ class CategoryController extends Controller
 
     public function delete($id)
     {
-        $this->categoryService->delete($id);
+        $this->categoryRepository->delete($id);
         return back()->with('alert-success', 'دسته بندی شما با موفقیت حذف شد');
     }
 
