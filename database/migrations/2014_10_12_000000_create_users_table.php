@@ -20,7 +20,6 @@ return new class extends Migration {
             $table->timestamp('mobile_verified_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('slug')->unique()->nullable();
-            $table->text('profile_photo_path')->comment('avatar');
             $table->string('password');
             $table->tinyInteger('activation')->default(0)->comment('0 => inactive , 1 => active');
             $table->timestamp('activation_date')->nullable();

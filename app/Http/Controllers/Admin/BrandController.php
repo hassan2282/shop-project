@@ -33,12 +33,7 @@ class BrandController extends Controller
 
     public function store(brandStoreRequest $request)
     {
-        $brand = $this->brandService->store($request);
-        if ($brand) {
-            return redirect(route('admin.brand.index'))->with('alert-success', 'برند شما با موفقیت اضافه شد!');
-        } else {
-            return back()->withInput();
-        }
+        return $this->brandService->store($request);
     }
 
 

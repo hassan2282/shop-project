@@ -5,7 +5,6 @@ namespace App\Repositories\Product;
 use App\Models\Admin\Brand;
 use App\Models\Admin\Category;
 use App\Models\Admin\Product;
-use App\Repositories\Product\ProductRepositoryInterface;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -24,7 +23,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getBrands()
     {
-        return Brand::get(['id','name']);
+        return Brand::get(['id','original_name']);
     }
 
     public function create($inputs, $image)

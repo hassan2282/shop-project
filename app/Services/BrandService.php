@@ -7,6 +7,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Brand\BrandRepositoryInterface;
 use App\Repositories\Media\MediaRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class BrandService extends BaseRepository
 {
@@ -20,24 +21,31 @@ class BrandService extends BaseRepository
         $this->mediaRepository = app()->make(MediaRepositoryInterface::class);
     }
 
-    public function store($request): Model
+    public function store($request)
     {
-        $brand =  $this->brandRepository->create(attributes: $request->toArray());
+        $brand = $this->brandRepository->create(attributes: $request->toArray());
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
-            $name = time() . trim($file->getClientOriginalName());
-            $file->storeAs('public/', $name);
+            $name = time() . Str::random(20) .'.'. $file->getClientOriginalExtension();
+            $file->storeAs('public/brands/', $name);
 
             $media = [
                 'name' => $name,
-                'mimetype' => $file->getClientOriginalExtension(),
+                'mimetype' => $file->getMimeType(),
                 'size' => $file->getSize(),
                 'mediable_type' => Brand::class,
                 'mediable_id' => $brand->id,
             ];
 
-            $this->mediaRepository->create(attributes: $media);
-            return $brand;
+            $store_media = $this->mediaRepository->create(attributes: $media);
+        }
+
+        if ($brand && isset($store_media)) {
+            return redirect(route('admin.brand.index'))->with('alert-success', 'برند شما با موفقیت اضافه شد [تصویر آپلود شد]!');
+        } elseif ($brand && !isset($store_media)) {
+            return redirect(route('admin.brand.index'))->with('alert-success', 'برند شما با موفقیت اضافه شد [تصویر آپلود نشد]!');
+        } else {
+            return back()->withInput();
         }
     }
 }

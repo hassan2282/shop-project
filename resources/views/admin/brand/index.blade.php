@@ -38,7 +38,7 @@
 
                             <td>
                                 @if($brand->media)
-                                    <img width="100" height="50" src="{{ asset('storage/app/public/' . $brand->media->name) }}">
+                                    <img width="100" height="50" src="{{ asset('storage/brands/' . $brand->media->name) }}">
                                 @endif
                             </td>
 

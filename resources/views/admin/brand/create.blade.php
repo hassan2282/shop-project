@@ -11,16 +11,29 @@
       <div class="card-body">
 
         <div class="mb-3 row">
-          <label class="col-md-2 col-form-label">نام برند</label>
+          <label class="col-md-2 col-form-label">نام برند به انگلیسی</label>
           <div class="col-md-10">
-            <input class="form-control mb-2" name="name" type="text" placeholder="نام را وارد کنید ..." value="{{ old('name') }}">
+            <input class="form-control mb-2" name="original_name" type="text" placeholder="نام را به انگلیسی وارد کنید ..." value="{{ old('original_name') }}" required>
 
-            @error('name')
+            @error('original_name')
                 <span class="text-danger mt-3">{{ $message }}</span>
             @enderror
 
           </div>
         </div>
+
+
+          <div class="mb-3 row">
+              <label class="col-md-2 col-form-label">نام برند به فارسی</label>
+              <div class="col-md-10">
+                  <input class="form-control mb-2" name="persian_name" type="text" placeholder="نام را به فارسی وارد کنید ..." value="{{ old('persian_name') }}">
+
+                  @error('persian_name')
+                  <span class="text-danger mt-3">{{ $message }}</span>
+                  @enderror
+
+              </div>
+          </div>
 
 
         <div class="mb-3 row">

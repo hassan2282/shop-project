@@ -16,11 +16,9 @@ use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
-    public function __construct(ProductRepositoryInterface $productRepository,
-                                ProductService             $productService)
+    public function __construct(readonly protected ProductRepositoryInterface $productRepository,
+                                readonly protected ProductService             $productService)
     {
-        $this->productRepository = $productRepository;
-        $this->productService = $productService;
     }
 
     public function index()
@@ -32,45 +30,16 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = $this->productRepository->getCategories();
-        $brands = $this->productRepository->getBrands();
+        $categories = $this->productService->getCategories();
+        $brands = $this->productService->getBrands();
         return view('admin.product.create', compact('categories', 'brands'));
     }
 
 
     public function store(ProductStoreRequest $productRequest, SaveImage $saveImage)
     {
-        // create Product
-//        $inputs = $productRequest->all();
-//        $image = $productRequest->file('image');
-//        $saveImage->save($image, 'Products');
-//        $inputs['image'] = $saveImage->saveImageDb();
-
         $this->productService->create($productRequest, $saveImage);
         $product = $this->productRepository->create($inputs);
-
-        if (isset($inputs['attributes'])) {
-            $attributes = collect($inputs['attributes']);
-            $attributes->each(function ($item) use ($product) {
-                if (is_null($item['name']) || is_null($item['value'])) return;
-
-                $attr = Attribute::create([
-                    'name' => $item['name']
-                ]);
-
-
-                $attr_value = $attr->values()->create([
-                    'value' => $item['value']
-                ]);
-
-                $product->attributes()->attach($attr->id, ['value_id' => $attr_value->id]);
-
-
-            });
-        }
-
-
-        return to_route('admin.product.index')->with('محصول جدید شما با موفقیت اضافه شد!');
     }
 
 
