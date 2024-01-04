@@ -27,7 +27,7 @@
                     <div class="mb-3 row">
                         <label class="col-md-2 col-form-label">قیمت محصول</label>
                         <div class="col-md-10">
-                            <input class="form-control mb-2" name="price" type="text"
+                            <input class="form-control mb-2" name="price" type="number"
                                    placeholder="قیمت را وارد کنید ..." value="{{ old('price') }}">
 
                             @error('price')
@@ -41,7 +41,7 @@
                     <div class="mb-3 row">
                         <label class="col-md-2 col-form-label">تعداد کالای موجود</label>
                         <div class="col-md-10">
-                            <input class="form-control mb-2" name="frozen_number" type="text"
+                            <input class="form-control mb-2" name="frozen_number" type="number"
                                    placeholder="تعداد کالای موجود را وارد کنید ..." value="{{ old('frozen_number') }}">
 
                             @error('frozen_number')
@@ -69,8 +69,8 @@
                     <div class="mb-3 row">
                         <label class="col-md-2 col-form-label">تصویر</label>
                         <div class="col-md-10">
-                            <input class="form-control mb-2" name="image" type="file" id="formFile">
-                            @error('image')
+                            <input type="file" class="form-control mb-2" name="media" id="formFile">
+                            @error('media')
                             <span class="text-danger mt-3">{{ $message }}</span>
                             @enderror
                         </div>

@@ -36,10 +36,9 @@ class ProductController extends Controller
     }
 
 
-    public function store(ProductStoreRequest $productRequest, SaveImage $saveImage)
+    public function store(ProductStoreRequest $request)
     {
-        $this->productService->create($productRequest, $saveImage);
-        $product = $this->productRepository->create($inputs);
+        return $this->productService->create($request);
     }
 
 

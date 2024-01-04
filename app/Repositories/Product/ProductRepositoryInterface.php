@@ -10,5 +10,5 @@ interface ProductRepositoryInterface
 
     public function getBrands();
 
-    public function create($inputs, $image);
+    public function create($attributes);
 }

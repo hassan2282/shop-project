@@ -22,14 +22,14 @@ class ProductStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'min:3', 'max:20'],
-            'description' => ['required', 'min:30', 'max:10000'],
-            'price' => ['required', 'numeric'],
-            'frozen_number' => ['required', 'numeric'],
-            'image' => ['required', 'mimes:png,jpg'],
-            'status' => ['required', 'numeric','in:0,1'],
-            'category_id' => ['required', 'exists:categories,id'],
-            'brand_id' => ['required', 'exists:brands,id'],
+            'name' => 'required|string|min:3|max:20',
+            'description' => 'required|min:20|max:10000',
+            'price' => 'required|numeric',
+            'frozen_number' => 'required|numeric',
+            'media' => 'required',
+            'status' => 'required|numeric|in:0,1',
+            'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'required|exists:brands,id',
             'attributes.*' => 'array',
         ];
     }

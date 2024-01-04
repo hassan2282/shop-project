@@ -3,23 +3,48 @@
 namespace App\Services;
 
 use App\Models\Admin\Attribute;
+use App\Models\Admin\Product;
+use App\Repositories\Media\MediaRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
+use Illuminate\Support\Str;
 
 class ProductService
 {
-    public function __construct(readonly protected ProductRepositoryInterface $productRepository)
+    public function __construct(readonly protected ProductRepositoryInterface $productRepository,
+                                readonly protected MediaRepositoryInterface   $mediaRepository)
     {
     }
 
-    public function create($productRequest, $saveImage)
+    public function create($request)
     {
-        $inputs = $productRequest->all();
-        $image = $productRequest->file('image');
-        $saveImage->save($image, 'Products');
-        $inputs['image'] = $saveImage->saveImageDb();
+        dd($request);
+        $product = [
+            'name' => $request->name,
+            'description' => $request->description,
+            'status' => $request->status,
+            'price' => $request->price,
+            'sold_number' => $request->sold_number,
+            'frozen_number' => $request->frozen_number,
+            'category_id' => $request->category_id,
+            'brand_id' => $request->brand_id,
+        ];
+        $productCreate = $this->productRepository->create($product);
 
-        $this->productRepository->create($inputs, $image);
+        if ($request->file('media')) {
+            $image = $request->file('media');
+            $image_name = Str::random(20) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/products/', $image_name);
 
+            $media = [
+                'name' => $image_name,
+                'size' => $image->getSize(),
+                'mimetype' => $image->getMimeType(),
+                'mediable_id' => $productCreate->id,
+                'mediable_type' => Product::class,
+            ];
+
+            $mediaStore = $this->mediaRepository->create($media);
+        }
         if (isset($inputs['attributes'])) {
             $attributes = collect($inputs['attributes']);
             $attributes->each(function ($item) use ($product) {

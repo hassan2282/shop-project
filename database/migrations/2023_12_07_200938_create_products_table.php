@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->text('image');
             $table->string('slug')->unique()->nullable();
             $table->decimal('price', 20, 3);
             $table->decimal('weight', 10, 1);
