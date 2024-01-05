@@ -22,10 +22,9 @@ class brandUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'original_name' => ['required', 'string', 'min:3', 'max:20'],
-            'description' => ['required', 'min:30', 'max:10000'],
-            'logo' => ['required', 'mimes:png,jpg'],
-            'status' => ['required', 'numeric','in:0,1'],
+            'original_name' => 'required|string|min:3|max:20',
+            'description' => 'required|min:30|max:10000',
+            'status' => 'required|numeric|in:0,1',
         ];
     }
 }

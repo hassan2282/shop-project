@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,7 +14,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         \App\Models\User::factory()->create();
+        $this->call([
+            CategoriesSeeder::class,
+            UsersSeeder::class,
+            BrandsSeeder::class,
+        ]);
 
 //         \App\Models\User::factory()->create([
 //             'first_name' => 'hassan',

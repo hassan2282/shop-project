@@ -1,20 +1,22 @@
 @extends('admin.layouts.master')
 
 @section('content')
-    @if (Session::has('alert-success'))
-        <div class="alert alert-success">
-            <ul>
-                <li>{{ Session::get('alert-success') }}</li>
-            </ul>
-        </div>
-    @endif
-
     <div class="card">
         <div class="card-header border-bottom">
             <h5 class="card-title mb-3">برند ها</h5>
             <a href="{{ route('admin.brand.create') }}" class="btn btn-primary float-end">اضافه کردن برند</a>
         </div>
-
+        @if(session()->has('alert-success'))
+            <div class="bg-success text-white rounded-2">
+                {{session()->get('message')}}
+            </div>
+        @endif
+        @if(session()->has('alert-error'))
+            <div class="bg-danger text-white rounded-2">
+                {{session()->get('message')}}
+            </div>
+        @endif
+        @include('validations.validation')
         <div class="card-datatable table-responsive">
             <table class="datatables-users table border-top">
                 <thead>
@@ -33,7 +35,7 @@
                     @foreach ($brands as $brand)
                         <tr>
                             <th>{{ $brand->id }}</th>
-                            <td>{{ $brand->persian_name }}</td>
+                            <td>{{ $brand->original_name }}</td>
                             <td>{{ Str::limit($brand->description, 10, ' ...') }}</td>
 
                             <td>

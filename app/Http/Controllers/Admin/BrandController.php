@@ -11,11 +11,9 @@ use App\Services\BrandService;
 
 class BrandController extends Controller
 {
-    public function __construct(BrandRepositoryInterface $brandRepository,
-                                BrandService             $brandService)
+    public function __construct(readonly protected BrandRepositoryInterface $brandRepository,
+                                readonly protected BrandService             $brandService)
     {
-        $this->brandRepository = $brandRepository;
-        $this->brandService = $brandService;
     }
 
     public function index()
@@ -43,18 +41,15 @@ class BrandController extends Controller
     }
 
 
-    public function update(Brand $brand, brandUpdateRequest $request)
+    public function update(brandUpdateRequest $request, $id)
     {
-
-        $this->brandRepository->update($brand, $request);
-        return to_route('admin.brand.index')->with('alert-success', 'برند شما با موفقیت ویرایش شد!');
+        return $this->brandService->update($request, $id);
     }
 
 
-    public function delete(Brand $brand)
+    public function delete(int $id)
     {
-        $this->brandRepository->delete($brand);
-        return back();
+        return $this->brandService->delete($id);
     }
 
 

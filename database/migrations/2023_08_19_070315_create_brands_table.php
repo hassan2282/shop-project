@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('persian_name')->nullable();
             $table->string('original_name');
             $table->text('description');
-            $table->text('logo');
-            $table->string('tags')->nullable();
             $table->string('slug')->unique()->nullable();
             $table->string('status')->default(0);
             $table->timestamps();
