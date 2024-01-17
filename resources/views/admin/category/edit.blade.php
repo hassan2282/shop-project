@@ -57,7 +57,9 @@
               <select id="parent" name="parent_id" class="form-select mb-2">
                   <option value="{{ null }}">انتخاب دستبندی</option>
                   @foreach ($allCategories as $allCategory)
-                  <option value="{{ $allCategory->id }}">{{ $allCategory->name }}</option>
+                      @if($allCategory->id !== $category->id)
+                          <option value="{{ $allCategory->id }}">{{ $allCategory->name }}</option>
+                      @endif
                   @endforeach
                 </select>
                       @error('parent_id')

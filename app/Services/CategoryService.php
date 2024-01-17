@@ -2,14 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\Admin\Category;
-use App\Repositories\BaseRepository;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use Illuminate\Http\RedirectResponse;
 
-class CategoryService extends BaseRepository
+class CategoryService
 {
-    public function __construct(Category $category)
+    public function __construct(readonly protected CategoryRepositoryInterface $categoryRepository)
     {
-        parent::__construct($category);
     }
 
     public function status($category)
@@ -17,4 +16,13 @@ class CategoryService extends BaseRepository
         $category->status = $category->status == 1 ? 0 : 1;
         $category->save();
     }
+
+    public function create($request): RedirectResponse
+    {
+        $store =  $this->categoryRepository->create(attributes: $request->toArray());
+        if ($store)
+            return to_route('admin.category.index')->with('alert-success', 'دسته بندی شما با موفقیت اضافه شد');
+            return to_route('admin.category.index')->with('alert-danger', 'متاسفانه خطایی رخ داده است!');
+    }
+
 }

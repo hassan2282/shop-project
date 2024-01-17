@@ -33,10 +33,7 @@ class CategoryController extends Controller
 
     public function store(CategoryStoreRequest $request)
     {
-        $store = $this->categoryRepository->create($request->toArray());
-        if ($store)
-        return to_route('admin.category.index')->with('alert-success', 'دسته بندی شما با موفقیت اضافه شد');
-        return to_route('admin.category.index')->with('alert-danger', 'متاسفانه خطایی رخ داده است!');
+        return $this->categoryService->create($request);
     }
 
     public function edit(Category $category)

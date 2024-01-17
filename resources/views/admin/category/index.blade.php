@@ -39,7 +39,7 @@
                         <th>آیدی</th>
                         <th>نام</th>
                         <th>توضیحات</th>
-                        <th>زیر دسته</th>
+                        <th>والد</th>
                         <th>اسلاگ</th>
                         <th>وضعیت</th>
                         <th>آپشن ها</th>
@@ -49,17 +49,17 @@
                 <tbody>
                     @foreach ($categories as $category)
                         <tr>
-                            <th>{{ $category->id }}</th>
-                            <td>{{ $category->name }}</td>
+                            <th>{{$category->id}}</th>
+                            <td>{{ \Illuminate\Support\Str::limit($category->name, 6) }}</td>
                             <td>{{ Str::limit($category->description, 10, ' ...') }}</td>
 
                             @if ($category->parent_id !== null)
-                            <td class="text-warning"> {{ $category->parent->id }}- {{ $category->parent->name }}</td>
+                            <td class="text-warning">{{\Illuminate\Support\Str::limit($category->parent->name, 5) }}</td>
                             @else
-                            <td class="text-danger">ندارد</td>
+                            <td class="text-danger">اصلی</td>
                             @endif
 
-                            <td>{{ $category->slug }}</td>
+                            <td>{{ \Illuminate\Support\Str::limit($category->slug, 6) }}</td>
 
                             @if ($category->status == 1)
                                 <td>
