@@ -35,11 +35,11 @@
                     <tr>
                         <th>{{ $product->id }}</th>
                         <td>{{ $product->name }}</td>
-                        <td>{{ $product->brand }}</td>
+                        <td>{{ $product->brand->original_name}}</td>
                         <td>{{ $product->price }}</td>
 
                         <td>{{ $product->slug }}</td>
-                        <td>{{ $product->category}}</td>
+                        <td>{{ $product->category->name}}</td>
 
                         @if ($product->status == 1)
                             <td>

@@ -17,8 +17,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function getDataForIndexProduct()
     {
-        return Product::with(['brand:id,name', 'category:id,name'])
-            ->select(['id', 'name', 'slug', 'price', 'status'])
+        return Product::with(['brand','category'])
+            ->select(['id', 'name', 'slug', 'price', 'status','brand_id','category_id'])
             ->paginate();
     }
 
