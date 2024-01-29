@@ -17,9 +17,9 @@ return new class extends Migration {
             $table->string('slug')->unique()->nullable();
             $table->decimal('price', 20, 3);
             $table->decimal('weight', 10, 1);
-            $table->decimal('width', 10, 1)->comment('cm unit');
-            $table->decimal('height', 10, 1)->comment('cm unit');
-            $table->decimal('length', 10, 1)->comment(' cm unit');
+            $table->decimal('width', 10, 1)->nullable()->comment('cm unit');
+            $table->decimal('height', 10, 1)->nullable()->comment('cm unit');
+            $table->decimal('length', 10, 1)->nullable()->comment(' cm unit');
             $table->foreignId('brand_id')->constrained('brands');
             $table->foreignId('category_id')->constrained('product_categories');
             $table->tinyInteger('status')->default(0);

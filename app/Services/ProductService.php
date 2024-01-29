@@ -17,17 +17,7 @@ class ProductService
 
     public function create($request)
     {
-        dd($request);
-        $product = [
-            'name' => $request->name,
-            'description' => $request->description,
-            'status' => $request->status,
-            'price' => $request->price,
-            'sold_number' => $request->sold_number,
-            'frozen_number' => $request->frozen_number,
-            'category_id' => $request->category_id,
-            'brand_id' => $request->brand_id,
-        ];
+        $product = $request->except('media','attributes');
         $productCreate = $this->productRepository->create($product);
 
         if ($request->file('media')) {
@@ -45,8 +35,9 @@ class ProductService
 
             $mediaStore = $this->mediaRepository->create($media);
         }
-        if (isset($inputs['attributes'])) {
-            $attributes = collect($inputs['attributes']);
+//        dd($request('attributes'));
+        if ($request('attributes')) {
+            $attributes = collect($request('attributes'));
             $attributes->each(function ($item) use ($product) {
                 if (is_null($item['name']) || is_null($item['value'])) return;
 

@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use function Laravel\Prompts\password;
 
 /**
@@ -19,23 +17,13 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-//        return [
-//            'first_name' => 'hassan',
-//            'last_name' => 'taghavey',
-//            'email' => 'taghavey.hassan@gmail.com',
-//            'mobile' => '09170249855',
-//            'national_code' => '4240461163',
-//            'password' => Hash::make('12345678'),
-//            'activation' => 1,
-//            'user_type' => 1,
-//        ];
         return [
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'mobile' => fake()->numerify('09#########'),
             'national_code' =>  fake()->numerify('##########'),
-            'password' => password(20),
+            'password' =>fake()->password(20),
             'activation' => fake()->randomElement([0,1]),
             'user_type' => fake()->randomElement([0,1]),
         ];
