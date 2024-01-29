@@ -35,9 +35,8 @@ class ProductService
 
             $mediaStore = $this->mediaRepository->create($media);
         }
-//        dd($request('attributes'));
-        if ($request('attributes')) {
-            $attributes = collect($request('attributes'));
+        if ($request['attributes']) {
+            $attributes = collect($request['attributes']);
             $attributes->each(function ($item) use ($product) {
                 if (is_null($item['name']) || is_null($item['value'])) return;
 
@@ -50,8 +49,7 @@ class ProductService
                     'value' => $item['value']
                 ]);
 
-                $product->attributes()->attach($attr->id, ['value_id' => $attr_value->id]);
-
+//                $product->attributes()->attach($attr->id, ['value_id' => $attr_value->id]);
 
             });
         }

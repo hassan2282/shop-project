@@ -2,7 +2,10 @@
 
 namespace App\Repositories\Product;
 
-interface ProductRepositoryInterface
+use App\Repositories\BaseRepository;
+use App\Repositories\EloquentRepositoryInterface;
+
+interface ProductRepositoryInterface extends EloquentRepositoryInterface
 {
     public function getDataForIndexProduct();
 
@@ -10,5 +13,4 @@ interface ProductRepositoryInterface
 
     public function getBrands();
 
-    public function create($attributes);
 }

@@ -16,15 +16,14 @@ return new class extends Migration {
             $table->text('description');
             $table->string('slug')->unique()->nullable();
             $table->decimal('price', 20, 3);
-            $table->decimal('weight', 10, 1);
+            $table->decimal('weight', 10, 1)->nullable();
             $table->decimal('width', 10, 1)->nullable()->comment('cm unit');
             $table->decimal('height', 10, 1)->nullable()->comment('cm unit');
             $table->decimal('length', 10, 1)->nullable()->comment(' cm unit');
             $table->foreignId('brand_id')->constrained('brands');
-            $table->foreignId('category_id')->constrained('product_categories');
+            $table->foreignId('category_id')->constrained('categories');
             $table->tinyInteger('status')->default(0);
             $table->tinyInteger('marketable')->default(1)->comment('1 => marketable, 0 => is not marketable');
-            $table->string('tags');
             $table->tinyInteger('sold_number')->default(0)->comment('تعداد فروخته شده');
             $table->tinyInteger('frozen_number')->default(0)->comment('کالا هایی که مشتری ها در حال خریدشان هستند ولی هنوز نهایی نشده');
             $table->tinyInteger('marketable_number')->default(0);

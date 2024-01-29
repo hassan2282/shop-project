@@ -5,9 +5,15 @@ namespace App\Repositories\Product;
 use App\Models\Admin\Brand;
 use App\Models\Admin\Category;
 use App\Models\Admin\Product;
+use App\Repositories\BaseRepository;
+use Illuminate\Database\Eloquent\Model;
 
-class ProductRepository implements ProductRepositoryInterface
+class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
+    public function __construct(Product $product)
+    {
+        parent::__construct($product);
+    }
 
     public function getDataForIndexProduct()
     {
@@ -24,10 +30,5 @@ class ProductRepository implements ProductRepositoryInterface
     public function getBrands()
     {
         return Brand::get(['id','original_name']);
-    }
-
-    public function create($attributes)
-    {
-        return Product::create($attributes);
     }
 }
