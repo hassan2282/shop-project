@@ -26,7 +26,6 @@ class ProductUpdateRequest extends FormRequest
             'description' => ['required', 'min:30', 'max:10000'],
             'price' => ['required', 'numeric'],
             'frozen_number' => ['required', 'numeric'],
-            'image' => ['mimes:png,jpg'],
             'status' => ['required', 'numeric','in:0,1'],
             'category_id' => ['required', 'exists:categories,id'],
             'brand_id' => ['required', 'exists:brands,id'],

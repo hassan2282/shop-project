@@ -51,58 +51,9 @@ class ProductController extends Controller
         return view('admin.product.edit', compact('product', 'categories', 'brands'));
     }
 
-
-    /**
-     * @param ProductUpdateRequest $productRequest
-     * @param SaveImage $saveImage
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(ProductUpdateRequest $productRequest, SaveImage $saveImage, int $id)
+    public function update(ProductUpdateRequest $request)
     {
-        // Find the product to update
-        $product = Product::findOrFail($id);
-
-        // Update Product data
-        $inputs = $productRequest->all();
-
-        // Check if a new image is uploaded
-        $newImage = $productRequest->file('image');
-        if (!is_null($newImage)) {
-            // Save the new image
-            $saveImage->save($newImage, 'Products');
-            $inputs['image'] = $saveImage->saveImageDb();
-
-            // Delete the old image if necessary
-            if (!is_null($product->image)) {
-                File::delete(public_path($product->image));
-            }
-        }
-
-        $product->update($inputs);
-
-        // Update attributes
-        if (!is_null($inputs['attributes'])) {
-            $attributes = collect($inputs['attributes']);
-            $attributes->each(function ($item) use ($product) {
-                if (is_null($item['name']) || is_null($item['value'])) return;
-
-                $attr = Attribute::firstOrCreate([
-                    'name' => $item['name']
-                ]);
-
-                $attrValue = $attr->values()->firstOrCreate([
-                    'value' => $item['value']
-                ]);
-
-                // Sync or attach the attribute and value to the product
-                $product->attributes()->syncWithoutDetaching([
-                    $attr->id => ['value_id' => $attrValue->id]
-                ]);
-            });
-        }
-
-        return redirect()->route('admin.product.index')->with('success', 'محصول با موفقیت به‌روزرسانی شد!');
+        return $this->productService->update($request);
     }
 
 

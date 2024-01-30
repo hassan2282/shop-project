@@ -113,14 +113,14 @@
           </div>
         </div>
 
-
         <div class="mb-3 row">
           <label for="parent" class="col-md-2 col-form-label">انتخاب برند</label>
           <div class="col-md-10">
             <select id="parent" name="brand_id" class="form-select mb-2">
                 <option value="{{ null }}">انتخاب برند</option>
+
                 @foreach ($brands as $brand)
-                <option value="{{ $brand->id }}" {{ $brand->id == $product->brand_id ? "SELECTED" : '' }}  >{{ $brand->name }}</option>
+                    <option value="{{ $brand->id }}" {{ $brand->id == $product->brand_id ? "SELECTED" : '' }}  >{{ $brand->original_name }}</option>
                 @endforeach
               </select>
                     @error('brand_id')
@@ -140,7 +140,7 @@
                             @foreach($product->attributes() as $attribute)
                                 <div class="row mb-2">
                                     <div class="col">
-                                        <input type="text" class="form-control" name="attributes[{{ $loop->index }}][name]" placeholder="ویژگی محصول" value="{{ dd($attribute) }}">
+                                        <input type="text" class="form-control" name="attributes[{{ $loop->index }}][name]" placeholder="ویژگی محصول" value="{{ dd($attribute->name) }}">
                                     </div>
                                     <div class="col">
                                         <input type="text" class="form-control" name="attributes[{{ $loop->index }}][value]" placeholder="مقدار ویژگی محصول" value="{{ $attribute->value }}">

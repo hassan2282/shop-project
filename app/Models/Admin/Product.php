@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Models\Media;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,5 +33,10 @@ class Product extends Model
     public function attributes(): HasMany
     {
         return $this->HasMany(Attribute::class);
+    }
+
+    public function media()
+    {
+        return $this->morphOne(Media::class, 'mediable');
     }
 }
