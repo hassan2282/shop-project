@@ -137,19 +137,19 @@
                 <div>
                     <h4 class="btn btn-primary" id="add-feature">افزودن ویژگی</h4>
                     <div id="feature-container">
-                        @foreach($product->attributes as $attribute)
-                            <div class="row mb-2">
-                                <div class="col">
-                                    <input type="text" class="form-control" name="attributes[{{ $loop->index }}][name]" placeholder="ویژگی محصول" value="{{ $attribute->name }}">
+                            @foreach($product->attributes() as $attribute)
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <input type="text" class="form-control" name="attributes[{{ $loop->index }}][name]" placeholder="ویژگی محصول" value="{{ dd($attribute) }}">
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" name="attributes[{{ $loop->index }}][value]" placeholder="مقدار ویژگی محصول" value="{{ $attribute->value }}">
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-danger remove-feature">حذف</button>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" name="attributes[{{ $loop->index }}][value]" placeholder="مقدار ویژگی محصول" value="{{ $attribute->value }}">
-                                </div>
-                                <div class="col">
-                                    <button class="btn btn-danger remove-feature">حذف</button>
-                                </div>
-                            </div>
-                        @endforeach
+                            @endforeach
 
                     </div>
                 </div>

@@ -12,7 +12,9 @@ use App\Models\Admin\Product;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\ProductService;
 use App\Services\SaveImage;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\File;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
@@ -21,14 +23,14 @@ class ProductController extends Controller
     {
     }
 
-    public function index()
+    public function index(): View
     {
         $products = $this->productRepository->getDataForIndexProduct();
         return view('admin.product.index', compact('products'));
     }
 
 
-    public function create()
+    public function create(): View
     {
         $categories = $this->productService->getCategories();
         $brands = $this->productService->getBrands();
@@ -36,13 +38,13 @@ class ProductController extends Controller
     }
 
 
-    public function store(ProductStoreRequest $request)
+    public function store(ProductStoreRequest $request): RedirectResponse
     {
         return $this->productService->create($request);
     }
 
 
-    public function edit(Product $product)
+    public function edit(Product $product): View
     {
         $categories = $this->productRepository->getCategories();
         $brands = $this->productRepository->getBrands();
@@ -106,20 +108,11 @@ class ProductController extends Controller
 
     public function delete(Product $product)
     {
-        $attributes = $product->attributes;
-
-        foreach ($attributes as $attribute) {
-            $delete = $product->attributes()->detach($attribute->id);
-        }
-
-        File::delete($product->image);
-        $product->delete();
-
-        return back();
+        return $this->productService->delete($product);
     }
 
 
-    public function status(Product $product)
+    public function status(Product $product): RedirectResponse
     {
         $product->status = $product->status == 1 ? 0 : 1;
         $product->save();
@@ -127,7 +120,7 @@ class ProductController extends Controller
     }
 
 
-    public function attribute(Product $product)
+    public function attribute(Product $product): View
     {
         return view('admin.product.attribute', compact('product'));
     }

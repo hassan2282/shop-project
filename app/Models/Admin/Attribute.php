@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Attribute extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'unit'];
+    protected $fillable = ['name', 'unit','product_id'];
 
-    public function products()
+    public function product()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsTo(Product::class);
     }
 
 
-    public function values()
+    public function value()
     {
-        return $this->hasMany(AttributeValue::class);
+        return $this->hasOne(AttributeValue::class);
     }
 }

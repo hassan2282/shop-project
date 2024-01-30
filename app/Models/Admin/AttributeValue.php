@@ -11,7 +11,7 @@ class AttributeValue extends Model
     protected $table = 'attribute_values';
     protected $fillable = ['value'];
 
-    public function attributes()
+    public function attribute()
     {
         return $this->belongsTo(Attribute::class);
     }

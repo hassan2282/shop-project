@@ -34,12 +34,12 @@
                 @foreach ($products as $product)
                     <tr>
                         <th>{{ $product->id }}</th>
-                        <td>{{ $product->name }}</td>
-                        <td>{{ $product->brand->original_name}}</td>
+                        <td>{{ Str::limit($product->name, 8) }}</td>
+                        <td>{{ Str::limit($product->brand->original_name, 8)}}</td>
                         <td>{{ $product->price }}</td>
 
-                        <td>{{ $product->slug }}</td>
-                        <td>{{ $product->category->name}}</td>
+                        <td>{{ Str::limit($product->slug, 8) }}</td>
+                        <td>{{ Str::limit($product->category->name, 8)}}</td>
 
                         @if ($product->status == 1)
                             <td>
