@@ -7,6 +7,7 @@ use App\Models\Admin\Product;
 use App\Repositories\Media\MediaRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Support\Str;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class ProductService
 {
@@ -23,7 +24,24 @@ class ProductService
         if ($request->file('media')) {
             $image = $request->file('media');
             $image_name = Str::random(20) . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/products/', $image_name);
+
+
+            if (getimagesize($image)[0] > 800) {
+                FFMpeg::open($image)
+                    ->addFilter(['-s', '800x600'])
+                    ->export()
+                    ->toDisk('public')
+                    ->save('products/' . $image_name);
+            } else {
+                $image->storeAs('public/products/', $image_name);
+            }
+
+            FFMpeg::fromDisk('public')
+                ->open('products/' . $image_name)
+                ->addFilter(['-s', '320x240'])
+                ->export()
+                ->toDisk('public')
+                ->save('thumbnails/' . $image_name);
 
             $media = [
                 'name' => $image_name,
