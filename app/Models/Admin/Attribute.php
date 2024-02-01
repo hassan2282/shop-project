@@ -4,20 +4,21 @@ namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Attribute extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'unit','product_id'];
 
-    public function product()
+    public function product(): BelongsToMany
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsToMany(Product::class);
     }
 
 
-    public function value()
+    public function attribute_values(): BelongsToMany
     {
-        return $this->hasOne(AttributeValue::class);
+        return $this->belongsToMany(AttributeValue::class);
     }
 }

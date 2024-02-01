@@ -51,15 +51,15 @@ class ProductController extends Controller
         return view('admin.product.edit', compact('product', 'categories', 'brands'));
     }
 
-    public function update(ProductUpdateRequest $request)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
-        return $this->productService->update($request);
+        return $this->productService->update($request, $product);
     }
 
 
     public function delete(Product $product)
     {
-        return $this->productService->delete($product);
+        $this->productService->delete($product);
     }
 
 

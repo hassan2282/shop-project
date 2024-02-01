@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Admin\Attribute;
 use App\Models\Admin\Product;
+use App\Models\Media;
 use App\Repositories\Attribute\AttributeRepositoryInterface;
 use App\Repositories\AttributeValue\AttributeValueRepositoryInterface;
 use App\Repositories\Media\MediaRepositoryInterface;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use ProtoneMedia\LaravelFFMpeg\Filesystem\Disk;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class ProductService
@@ -27,8 +29,7 @@ class ProductService
     public function create(Request $request): RedirectResponse
     {
 
-        $product = $request->except('media', 'attributes');
-        $productCreate = $this->productRepository->create($product);
+        $productCreate = $this->productRepository->create($request->except('media', 'attributes'));
 
         if ($request->file('media')) {
             $image = $request->file('media');
@@ -104,28 +105,51 @@ class ProductService
         }
     }
 
-    public function update($request): RedirectResponse
+    public function update(Request $request, Product $product): RedirectResponse
     {
-        // Find the product to update
-        $product = Product::findOrFail($id);
-
-        // Update Product data
-        $inputs = $productRequest->all();
-
-        // Check if a new image is uploaded
-        $newImage = $productRequest->file('image');
-        if (!is_null($newImage)) {
-            // Save the new image
-            $saveImage->save($newImage, 'Products');
-            $inputs['image'] = $saveImage->saveImageDb();
-
-            // Delete the old image if necessary
-            if (!is_null($product->image)) {
-                File::delete(public_path($product->image));
+        if ($request['attributes']) {
+            $productAttributes = $this->attributeRepository->where('product_id', $product->id);
+            
+            foreach ($request['attributes'] as $attribute) {
+                $targetAttribute = $this->attributeRepository->where('name', $attribute['name']);
+                $this->attributeRepository->update(['name' => $attribute['name']], $product->attributes);
             }
         }
+        dd('hi');
+        $productUpdate = $this->productRepository->update($request->except('media','attributes'), $product->id);
 
-        $product->update($inputs);
+        if ($request->file('media')) {
+            $this->mediaRepository->delete($product->media->id);
+            Storage::disk('public')->delete('products/' . $product->media->name);
+            Storage::disk('public')->delete('thumbnails' . $product->media->name);
+
+            $image = $request->file('media');
+            $image_name = time() . '.' . Str::random(20) . '.' . $image->getClientOriginalExtension();
+            if (getimagesize($image)[0] > 800) {
+                FFMpeg::open($image)
+                    ->addFilter(['-s', '800x600'])
+                    ->export()
+                    ->toDisk('public')
+                    ->save('products/' . $image_name);
+            } else {
+                $image->storeAs('public/products/', $image_name);
+            }
+            FFMpeg::open($image)
+                ->addFilter(['-s', '300x240'])
+                ->export()
+                ->toDisk('public')
+                ->save('thumbnails/' . $image_name);
+
+            $media = [
+                'name' => $image_name,
+                'size' => $image->getSize(),
+                'mimetype' => $image->getMimeType(),
+                'mediable_id' => $productUpdate->id,
+                'mediable_type' => Media::class,
+            ];
+            $this->mediaRepository->create($media);
+        }
+
 
         // Update attributes
         if (!is_null($inputs['attributes'])) {

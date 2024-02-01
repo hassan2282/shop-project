@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->tinyInteger('unit')->nullable();
-            $table->foreignId('product_id')->constrained('products');
             $table->timestamps();
         });
     }
