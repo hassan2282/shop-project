@@ -177,16 +177,18 @@ class ProductService
         return redirect()->route('admin.product.index')->with('success', 'محصول با موفقیت به‌روزرسانی شد!');
     }
 
-    public
-    function delete(Product $product): void
+    public function delete(Product $product): RedirectResponse
     {
-        $this->mediaRepository->delete($product->media->id);
-        Storage::disk('public')->delete('products/' . $product->media->name);
-        Storage::disk('public')->delete('thumbnails/' . $product->media->name);
+        if ($product->media) {
+            $this->mediaRepository->delete($product->media->id);
+            Storage::disk('public')->delete('products/' . $product->media->name);
+            Storage::disk('public')->delete('thumbnails/' . $product->media->name);
+        }
         foreach ($product->attributes as $attribute) {
             $this->attributeValueRepository->delete($attribute->value->id);
             $this->attributeRepository->delete($attribute->id);
         }
         $this->productRepository->delete($product->id);
+        return redirect()->route('admin.product.index')->with('success', 'محصول با موفقیت به‌روزرسانی شد!');
     }
 }
