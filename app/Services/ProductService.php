@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Admin\Attribute;
+use App\Models\Admin\AttributeValue;
 use App\Models\Admin\Product;
 use App\Models\Media;
 use App\Repositories\Attribute\AttributeRepositoryInterface;
@@ -66,19 +67,22 @@ class ProductService
 
         if ($request['attributes']) {
             $attributes = collect($request['attributes']);
-            $attributes->each(function ($item) use ($productCreate) {
+            $attr = [];
+            $attr_value = [];
+            $attributes->each(function ($item) use ($productCreate, &$attr, &$attr_value) {
                 if (is_null($item['name']) || is_null($item['value'])) return;
-                $attr = Attribute::create([
-                    'name' => $item['name'],
-                    'product_id' => $productCreate->id,
-                ]);
 
+                $attribute = $this->attributeRepository->create(['name' => $item['name']]);
+                $attr[] = $attribute->id;
 
-                $attr_value = $attr->value()->create([
-                    'value' => $item['value']
-                ]);
+                $attributeValue = $this->attributeValueRepository->create(['value' => $item['value'] , 'product_id' => $productCreate->id ]);
+                $attr_value[] = $attributeValue->id;
+                $attribute->attribute_values()->sync($attr_value);
 
             });
+            $productCreate->attributes()->sync($attr);
+            $productCreate->attribute_values()->sync($attr_value);
+
         }
 
 
@@ -107,24 +111,18 @@ class ProductService
 
     public function update(Request $request, Product $product): RedirectResponse
     {
-        if ($request['attributes']) {
-            $productAttributes = $this->attributeRepository->where('product_id', $product->id);
-            
-            foreach ($request['attributes'] as $attribute) {
-                $targetAttribute = $this->attributeRepository->where('name', $attribute['name']);
-                $this->attributeRepository->update(['name' => $attribute['name']], $product->attributes);
-            }
-        }
-        dd('hi');
-        $productUpdate = $this->productRepository->update($request->except('media','attributes'), $product->id);
+        $productUpdate = $this->productRepository->update($request->except('media', 'attributes'), $product->id);
 
         if ($request->file('media')) {
+
             $this->mediaRepository->delete($product->media->id);
-            Storage::disk('public')->delete('products/' . $product->media->name);
-            Storage::disk('public')->delete('thumbnails' . $product->media->name);
+            Storage::disk('public')->delete('products/', $product->media->name);
+            Storage::disk('public')->delete('thumbnails/', $product->media->name);
 
             $image = $request->file('media');
-            $image_name = time() . '.' . Str::random(20) . '.' . $image->getClientOriginalExtension();
+            $image_name = Str::random(20) . '.' . $image->getClientOriginalExtension();
+
+
             if (getimagesize($image)[0] > 800) {
                 FFMpeg::open($image)
                     ->addFilter(['-s', '800x600'])
@@ -134,8 +132,10 @@ class ProductService
             } else {
                 $image->storeAs('public/products/', $image_name);
             }
-            FFMpeg::open($image)
-                ->addFilter(['-s', '300x240'])
+
+            FFMpeg::fromDisk('public')
+                ->open('products/' . $image_name)
+                ->addFilter(['-s', '320x240'])
                 ->export()
                 ->toDisk('public')
                 ->save('thumbnails/' . $image_name);
@@ -144,38 +144,41 @@ class ProductService
                 'name' => $image_name,
                 'size' => $image->getSize(),
                 'mimetype' => $image->getMimeType(),
-                'mediable_id' => $productUpdate->id,
-                'mediable_type' => Media::class,
+                'mediable_id' => $product->id,
+                'mediable_type' => Product::class,
             ];
-            $this->mediaRepository->create($media);
+
+            $mediaStore = $this->mediaRepository->create($media);
         }
 
+        if ($request['attributes']) {
+            $product->attributes()->delete();
+            $product->attribute_values()->delete();
 
-        // Update attributes
-        if (!is_null($inputs['attributes'])) {
-            $attributes = collect($inputs['attributes']);
-            $attributes->each(function ($item) use ($product) {
+            $attributes = collect($request['attributes']);
+            $attr = [];
+            $attr_value = [];
+
+            $attributes->each(function ($item) use ($product ,&$attr, &$attr_value) {
                 if (is_null($item['name']) || is_null($item['value'])) return;
 
-                $attr = Attribute::firstOrCreate([
-                    'name' => $item['name']
-                ]);
+                $attribute = $this->attributeRepository->create(['value' => $item['name']]);
+                $attr[] = $attribute->id;
 
-                $attrValue = $attr->values()->firstOrCreate([
-                    'value' => $item['value']
-                ]);
-
-                // Sync or attach the attribute and value to the product
-                $product->attributes()->syncWithoutDetaching([
-                    $attr->id => ['value_id' => $attrValue->id]
-                ]);
+                $attributeValue = $this->attributeValueRepository->create(['value' => $item['value'], 'product_id' => $product->id ]);
+                $attr_value[] = $attributeValue->id;
+                $attribute->attribute_values()->sync($attr_value);
             });
+
+            $product->attributes()->sync($attr);
+            $product->attribute_values()->sync($attr_value);
         }
 
         return redirect()->route('admin.product.index')->with('success', 'محصول با موفقیت به‌روزرسانی شد!');
     }
 
-    public function delete(Product $product): void
+    public
+    function delete(Product $product): void
     {
         $this->mediaRepository->delete($product->media->id);
         Storage::disk('public')->delete('products/' . $product->media->name);

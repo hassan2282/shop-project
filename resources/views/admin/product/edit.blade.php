@@ -137,13 +137,13 @@
                 <div>
                     <h4 class="btn btn-primary" id="add-feature">افزودن ویژگی</h4>
                     <div id="feature-container">
-                            @foreach($product->attributes() as $attribute)
+                            @foreach($product->attributes as $attribute)
                                 <div class="row mb-2">
                                     <div class="col">
-                                        <input type="text" class="form-control" name="attributes[{{ $loop->index }}][name]" placeholder="ویژگی محصول" value="{{ dd($attribute->name) }}">
+                                        <input type="text" class="form-control" name="attributes[{{ $loop->index }}][name]" placeholder="ویژگی محصول" value="{{ $attribute->name }}">
                                     </div>
                                     <div class="col">
-                                        <input type="text" class="form-control" name="attributes[{{ $loop->index }}][value]" placeholder="مقدار ویژگی محصول" value="{{ $attribute->value }}">
+                                        <input type="text" class="form-control" name="attributes[{{ $loop->index }}][value]" placeholder="مقدار ویژگی محصول" value="{{ $attribute->attribute_values[$loop->index]['value'] }}">
                                     </div>
                                     <div class="col">
                                         <button class="btn btn-danger remove-feature">حذف</button>

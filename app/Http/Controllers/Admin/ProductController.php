@@ -9,6 +9,7 @@ use App\Models\Admin\Attribute;
 use App\Models\Admin\Brand;
 use App\Models\Admin\Category;
 use App\Models\Admin\Product;
+use App\Repositories\AttributeValue\AttributeValueRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\ProductService;
 use App\Services\SaveImage;
@@ -18,8 +19,9 @@ use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function __construct(readonly protected ProductRepositoryInterface $productRepository,
-                                readonly protected ProductService             $productService)
+    public function __construct(readonly protected ProductRepositoryInterface        $productRepository,
+                                readonly protected ProductService                    $productService,
+                                readonly protected AttributeValueRepositoryInterface $attributeValueRepository)
     {
     }
 
@@ -73,7 +75,9 @@ class ProductController extends Controller
 
     public function attribute(Product $product): View
     {
-        return view('admin.product.attribute', compact('product'));
+        $attributes = $product->attributes();
+        $attribute_values = $this->attributeValueRepository->where('product_id', $product->id);
+        return view('admin.product.attribute', compact('product', 'attributes', 'attribute_values'));
     }
 
 }

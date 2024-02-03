@@ -29,8 +29,8 @@
                             <th>{{ $product->id }}</th>
 
                             <td>
-                                @foreach($product->attributes->pluck('name') as $name)
-                                    <li style="font-size: 15px">{{ $name }}</li>
+                                @foreach($product->attributes as $attribute)
+                                    <li style="font-size: 15px">{{ $attribute->name }}</li>
                                     <hr>
                                 @endforeach
                             </td>
@@ -44,14 +44,14 @@
                             </td> --}}
 
                             <td>
-                                @foreach($product->attributes as $attribute)
-                                    @foreach($attribute->values as $value)
-                                        @if ($attribute->id == $value->attribute_id)
+{{--                                @foreach($product->attributes as $attribute)--}}
+                                    @foreach($attribute_values as $value)
+{{--                                        @if ($attribute->id == $value->attribute_id)--}}
                                             <li style="font-size: 15px"> {{ $value->value }} </li>
                                         <hr>
-                                        @endif
+{{--                                        @endif--}}
                                     @endforeach
-                                @endforeach
+{{--                                @endforeach--}}
                             </td>
 
 
