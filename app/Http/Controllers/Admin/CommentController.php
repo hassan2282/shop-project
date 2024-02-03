@@ -36,15 +36,15 @@ class CommentController extends Controller
 
     public function ShowCreate(Comment $comment, CommentRequest $request)
     {
-        $inputs = $request->all();
+        Comment::create([
+            'body' => $request->body,
+            'parent_id' => $comment->id,
+            'user_id' => auth()->user()->id,
+            'status' => 1,
+            'commentable_type' => $comment->commentable_type,
+            'commentable_id' => $comment->commentable_id,
+        ]);
 
-        $inputs['body'] = $request->body;
-        $inputs['parent_id'] = $comment->id;
-        $inputs['user_id'] = auth()->user()->id;
-        $inputs['status'] = 1;
-
-
-        $comment->create($inputs);
         return to_route('admin.comment.index')->with('alert-success', 'نظر شما با موفقیت ثبت شد!');
     }
 
