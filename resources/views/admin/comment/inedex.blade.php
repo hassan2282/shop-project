@@ -17,62 +17,69 @@
         <div class="card-datatable table-responsive">
             <table class="datatables-users table border-top">
                 <thead>
-                    <tr>
-                        <th>آیدی</th>
-                        <th>کامنت</th>
-                        <th>نویسنده</th>
-                        <th>محصول</th>
-                        <th>زیر دسته</th>
-                        <th>وضعیت</th>
-                        <th>آپشن ها</th>
-                    </tr>
+                <tr>
+                    <th>آیدی</th>
+                    <th>کامنت</th>
+                    <th>نویسنده</th>
+                    <th>مربوط به ...</th>
+                    <th>زیر دسته</th>
+                    <th>وضعیت</th>
+                    <th>آپشن ها</th>
+                </tr>
                 </thead>
 
                 <tbody>
-                    @foreach ($comments as $comment)
-                        <tr>
-                            <th>{{ $comment->id }}</th>
-                            <td>{{ Str::limit($comment->comment, 10, '...') }}</td>
-                            <td>{{ $comment->user->userName }}</td>
-                            <td>{{ $comment->product->id }}- {{ $comment->product->name }}</td>
+                @foreach ($comments as $comment)
+                    <tr>
+                        <th>{{ $comment->id }}</th>
+                        <td>{{ Str::limit($comment->body, 10, '...') }}</td>
+                        <td>{{ $comment->user->first_name }}</td>
+                        @if($comment->commentable)
+                            <td>{{ Str::limit($comment->commentable->first()->name, 10, '...') }} : {{ $comment->commentable_type === 'App\Models\Admin\Product' ? 'Product' : 'Category' }}</td>
+                        @else
+                            <td>{{$comment->commentable}}</td>
+                        @endif
 
-                            @if ($comment->parent_id !== null)
-                            <td class="text-warning"> {{ $comment->parent->id }}- {{ Str::limit($comment->parent->comment, 10, '...') }}</td>
-                            @else
+                        @if ($comment->parent_id !== null)
+                            <td class="text-warning"> {{ $comment->parent->id }}
+                                - {{ Str::limit($comment->parent->body, 10, '...') }}</td>
+                        @else
                             <td class="text-danger">ندارد</td>
-                            @endif
+                        @endif
 
 
-                            @if ($comment->status == 1)
-                                <td>
-                                    <a href="{{ route('admin.comment.status', $comment->id) }}"
-                                        class="btn rounded-pill btn-sm btn-success waves-effect waves-light">فعال</a>
-                                </td>
-                            @else
-                                <td>
-                                    <a href="{{ route('admin.comment.status', $comment->id) }}"
-                                        class="btn rounded-pill btn-sm btn-danger waves-effect waves-light">غیر فعال</a>
-                                </td>
-                            @endif
-
+                        @if ($comment->status == 1)
                             <td>
-                                <a href="{{ route('admin.comment.show', $comment->id) }}"
-                                    class="btn btn-sm rounded-pill btn-info waves-effect waves-light">پاسخ</a>
-
-                                <form id="deleteButton" class="d-inline" action="{{ route('admin.comment.delete', $comment->id) }}"
-                                    method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="button"
-                                        class="btn rounded-pill btn-sm btn-danger waves-effect waves-light deleteButton"
-                                        id="deleteButton">حذف</button>
-                                </form>
-
+                                <a href="{{ route('admin.comment.status', $comment->id) }}"
+                                   class="btn rounded-pill btn-sm btn-success waves-effect waves-light">فعال</a>
                             </td>
+                        @else
+                            <td>
+                                <a href="{{ route('admin.comment.status', $comment->id) }}"
+                                   class="btn rounded-pill btn-sm btn-danger waves-effect waves-light">غیر فعال</a>
+                            </td>
+                        @endif
+
+                        <td>
+                            <a href="{{ route('admin.comment.show', $comment->id) }}"
+                               class="btn btn-sm rounded-pill btn-info waves-effect waves-light">پاسخ</a>
+
+                            <form id="deleteButton" class="d-inline"
+                                  action="{{ route('admin.comment.delete', $comment->id) }}"
+                                  method="POST">
+                                @csrf
+                                @method('delete')
+                                <button type="button"
+                                        class="btn rounded-pill btn-sm btn-danger waves-effect waves-light deleteButton"
+                                        id="deleteButton">حذف
+                                </button>
+                            </form>
+
+                        </td>
 
 
-                        </tr>
-                    @endforeach
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
 

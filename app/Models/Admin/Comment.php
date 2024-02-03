@@ -27,9 +27,9 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function product()
+    public function commentable()
     {
-        return $this->belongsTo(Product::class);
+        return $this->morphTo();
     }
 
 }
