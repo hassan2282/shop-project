@@ -7,7 +7,7 @@ use App\Repositories\EloquentRepositoryInterface;
 
 interface ProductRepositoryInterface extends EloquentRepositoryInterface
 {
-    public function getDataForIndexProduct();
+    public function getProductsByFilters();
 
     public function getCategories();
 

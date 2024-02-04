@@ -27,7 +27,7 @@ class ProductController extends Controller
 
     public function index(): View
     {
-        $products = $this->productRepository->getDataForIndexProduct();
+        $products = $this->productRepository->getProductsByFilters();
         return view('admin.product.index', compact('products'));
     }
 

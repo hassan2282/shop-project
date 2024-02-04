@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Product;
 
+use App\Filters\ProductFilter;
 use App\Models\Admin\Brand;
 use App\Models\Admin\Category;
 use App\Models\Admin\Product;
@@ -15,11 +16,17 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         parent::__construct($product);
     }
 
-    public function getDataForIndexProduct()
+    public function getProductsByFilters()
     {
-        return Product::with(['brand','category'])
-            ->select(['id', 'name', 'slug', 'price', 'status','brand_id','category_id'])
-            ->paginate();
+        $queryParams = [
+            'q' => request()->q,
+            'status' => request()->status,
+            'brand' => request()->brand,
+            'category' => request()->category,
+            'smaller' => request()->smaller,
+            'bigger' => request()->bigger
+        ];
+        return (new ProductFilter($queryParams, 15))->getResult();
     }
 
     public function getCategories()

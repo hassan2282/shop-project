@@ -12,7 +12,22 @@
     <div class="card">
         <div class="card-header border-bottom">
             <h5 class="card-title mb-3">محصولات</h5>
-            <a href="{{ route('admin.product.create') }}" class="btn btn-primary float-end">اضافه کردن محصول</a>
+            <form class="d-flex justify-content-between">
+                <div class="input-group w-75">
+                    <input type="search" name="q" value="{{request()->q}}" class="form-control" placeholder="فیلتر آیدی | نام">
+                    <input type="search" name="brand" value="{{request()->brand}}" class="form-control" placeholder="برند">
+                    <input type="number" name="smaller" value="{{request()->smaller}}" class="form-control" placeholder="کمتر از">
+                    <input type="number" name="bigger" value="{{request()->bigger}}" class="form-control" placeholder="بیشتر از">
+                    <input type="search" name="category" value="{{request()->category}}" class="form-control" placeholder="دسته بندی">
+                    <select class="form-select" name="status" aria-label="Default select example">
+                        <option selected value="">وضعیت</option>
+                        <option value="active" >فعال</option>
+                        <option value="not_active">غیر فعال</option>
+                    </select>
+                    <button class="btn btn-warning" type="submit">search</button>
+                </div>
+                <a href="{{ route('admin.product.create') }}" class="btn btn-primary float-end">اضافه کردن محصول</a>
+            </form>
         </div>
 
         <div class="card-datatable table-responsive">
