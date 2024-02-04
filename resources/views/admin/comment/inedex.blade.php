@@ -22,7 +22,7 @@
                     <th>کامنت</th>
                     <th>نویسنده</th>
                     <th>مربوط به ...</th>
-                    <th>زیر دسته</th>
+                    <th>والد</th>
                     <th>وضعیت</th>
                     <th>آپشن ها</th>
                 </tr>
@@ -35,7 +35,8 @@
                         <td>{{ Str::limit($comment->body, 10, '...') }}</td>
                         <td>{{ $comment->user->first_name }}</td>
                         @if($comment->commentable)
-                            <td>{{ Str::limit($comment->commentable->first()->name, 10, '...') }} : {{ $comment->commentable_type === 'App\Models\Admin\Product' ? 'Product' : 'Category' }}</td>
+                            <td>{{ Str::limit($comment->commentable->first()->name, 10, '...') }}
+                                : {{ $comment->commentable_type === 'App\Models\Admin\Product' ? 'Product' : 'Category' }}</td>
                         @else
                             <td>{{$comment->commentable}}</td>
                         @endif
@@ -69,10 +70,17 @@
                                   method="POST">
                                 @csrf
                                 @method('delete')
-                                <button type="button"
-                                        class="btn rounded-pill btn-sm btn-danger waves-effect waves-light deleteButton"
-                                        id="deleteButton">حذف
-                                </button>
+                                @if($comment->hasChild()->count() === 0 )
+                                    <button type="button"
+                                            class="btn rounded-pill btn-sm btn-danger waves-effect waves-light deleteButton"
+                                            id="deleteButton">حذف
+                                    </button>
+                                @else
+                                    <div
+                                            class="btn rounded-pill btn-sm btn-dark waves-effect waves-light"
+                                            >کامنت والد
+                                    </div>
+                                @endif
                             </form>
 
                         </td>
