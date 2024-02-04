@@ -18,7 +18,7 @@ class BrandController extends Controller
 
     public function index()
     {
-        $brands = $this->brandRepository->allWithPaginate();
+        $brands = $this->brandRepository->getBrandsWithFilters();
         return view('admin.brand.index', compact('brands'));
     }
 

@@ -6,4 +6,5 @@ use App\Repositories\EloquentRepositoryInterface;
 
 interface BrandRepositoryInterface extends EloquentRepositoryInterface
 {
+    public function getBrandsWithFilters();
 }

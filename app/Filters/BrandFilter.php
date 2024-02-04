@@ -2,32 +2,33 @@
 
 namespace App\Filters;
 
-use App\Models\Admin\Category;
+use App\Models\Admin\Brand;
 
-class CategoryFilter
+class BrandFilter
 {
     private $per_page;
-    private $query;
-    private $queryParams;
+    private $queryParam;
     private $searchKey;
     private $result;
+    private $sort;
+    private $query;
     private $status;
+
 
     public function __construct($queryParams, $per_page)
     {
-        $this->queryParams = $queryParams;
+        $this->queryParam = $queryParams;
         $this->per_page = $per_page;
-        $this->query = Category::query();
+        $this->query = Brand::query();
         $this->filter();
-
     }
 
     private function extractKeyByKeyName($key)
     {
-        if (isset($this->queryParams[$key])) {
-           $q = $this->queryParams[$key];
-           unset($this->queryParams[$key]);
-           return $q;
+        if (isset($this->queryParam[$key])) {
+            $q = $this->queryParam[$key];
+            unset($this->queryParam[$key]);
+            return $q;
         }
     }
 
@@ -41,27 +42,28 @@ class CategoryFilter
         $this->status = $this->extractKeyByKeyName('status');
     }
 
-    public function createQuery()
+    private function createQuery()
     {
         if ($this->searchKey) {
-            $this->query->where('name','LIKE', '%' . $this->searchKey . '%')
-                ->orWhere('description','LIKE', '%' . $this->searchKey . '%');
+            $this->query->where('original_name', 'like', '%' . $this->searchKey . '%')
+                ->orwhere('description', 'like', '%' . $this->searchKey . '%');
         }
 
         if ($this->status) {
             if ($this->status === 'active') {
                 $this->query->where('status', 1);
-            }else {
+            } else {
                 $this->query->where('status', 0);
             }
         }
     }
-    public function fetchData()
+
+    private function fetchData()
     {
-        $this->result = $this->query->orderBy('id','desc')->paginate($this->per_page);
+        $this->result =  $this->query->orderBy('id','desc')->paginate($this->per_page);
     }
 
-    public function filter()
+    private function filter()
     {
         $this->extractSearchKey();
         $this->extractStatus();
