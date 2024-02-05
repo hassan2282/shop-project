@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Filters\CommentFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CommentRequest;
 use App\Models\Admin\Category;
@@ -11,7 +12,13 @@ class CommentController extends Controller
 {
     public function index()
     {
-        $comments = Comment::Paginate(10);
+        $queryParams = [
+            'q' => request()->q,
+            'status' => request()->status,
+            'author' => request()->author,
+            'parent' => request()->parent
+        ];
+        $comments = (new CommentFilter($queryParams, 15))->getResult();
         return view('admin.comment.inedex', compact('comments'));
     }
 
