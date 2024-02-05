@@ -81,9 +81,17 @@
                                     method="POST">
                                     @csrf
                                     @method('delete')
-                                    <button type="button"
-                                        class="btn rounded-pill btn-sm btn-danger waves-effect waves-light deleteButton"
-                                        id="deleteButton">حذف</button>
+                                @if($category->hasChild())
+                                        <div
+                                            class="btn rounded-pill btn-sm btn-dark waves-effect waves-light"
+                                        >دسته بندی والد
+                                        </div>
+                                    @else
+                                        <button type="button"
+                                                class="btn rounded-pill btn-sm btn-danger waves-effect waves-light deleteButton"
+                                                id="deleteButton">حذف
+                                        </button>
+                                    @endif
                                 </form>
 
                             </td>

@@ -20,8 +20,8 @@ return new class extends Migration {
             $table->decimal('width', 10, 1)->nullable()->comment('cm unit');
             $table->decimal('height', 10, 1)->nullable()->comment('cm unit');
             $table->decimal('length', 10, 1)->nullable()->comment(' cm unit');
-            $table->foreignId('brand_id')->constrained('brands');
-            $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('brand_id')->constrained('brands')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete()->cascadeOnUpdate();
             $table->tinyInteger('status')->default(0);
             $table->tinyInteger('marketable')->default(1)->comment('1 => marketable, 0 => is not marketable');
             $table->tinyInteger('sold_number')->default(0)->comment('تعداد فروخته شده');

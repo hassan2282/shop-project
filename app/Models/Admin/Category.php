@@ -40,4 +40,8 @@ class Category extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+    public function hasChild()
+    {
+        return $this->children()->get()->count();
+    }
 }
