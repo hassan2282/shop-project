@@ -16,14 +16,4 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         parent::__construct($category);
     }
 
-    public function getAllCategoriesByFilters()
-    {
-        $queryParams = [
-            'q' => request()->q,
-            'status' => request()->status,
-        ];
-        return (new CategoryFilter($queryParams, 15))->getResult();
-    }
-
-
 }

@@ -6,6 +6,4 @@ use App\Repositories\EloquentRepositoryInterface;
 
 interface CategoryRepositoryInterface extends EloquentRepositoryInterface
 {
-    public function getAllCategoriesByFilters();
-
 }

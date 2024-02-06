@@ -52,8 +52,11 @@ class CommentFilter
     private function createQuery()
     {
         if ($this->searchKey) {
-            $this->query->where('id', $this->searchKey)
-                ->orWhere('body','like','%'.$this->searchKey.'%');
+            $this->query->where(function ($query){
+                $this->query->where('id', $this->searchKey)
+                    ->orWhere('body','like','%'.$this->searchKey.'%');
+            });
+
         }
         if ($this->status) {
             if ($this->status === 'active') {

@@ -6,11 +6,11 @@
             <h5 class="card-title mb-3">برند ها</h5>
             <form class="d-flex justify-content-between">
                 <div class="input-group w-75">
-                    <input type="search" name="q" value="{{\request()->q}}" class="form-control" placeholder="جست و جو! ...">
+                    <input type="search" name="q" value="{{\request()->q}}" class="form-control" placeholder="جست و جو در نام و توضیحات ...">
                     <select class="form-select" name="status" aria-label="Default select example">
                         <option selected value="">فیلتر بر اساس وضعیت</option>
-                        <option value="active" >فعال</option>
-                        <option value="not_active">غیر فعال</option>
+                        <option value="active" {{request()->status === 'active' ? 'selected' : ''}}>فعال</option>
+                        <option value="not_active" {{request()->status === 'not_active' ? 'selected' : ''}}>غیر فعال</option>
                     </select>
                     <button class="btn btn-warning" type="submit">search</button>
                 </div>

@@ -13,14 +13,6 @@ class BrandRepository extends BaseRepository implements BrandRepositoryInterface
         parent::__construct($brand);
     }
 
-    public function getBrandsWithFilters()
-    {
-        $queryParams = [
-            'q' => request()->q,
-            'status' => request()->status,
-        ];
-        return (new BrandFilter($queryParams, 15))->getResult();
-    }
     public function status($brand)
     {
         $brand->status = $brand->status == 1 ? 0 : 1;

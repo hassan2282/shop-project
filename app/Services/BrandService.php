@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Filters\BrandFilter;
 use App\Models\Admin\Brand;
 use App\Repositories\Brand\BrandRepositoryInterface;
 use App\Repositories\Media\MediaRepositoryInterface;
@@ -11,8 +12,23 @@ use Illuminate\Support\Str;
 class BrandService
 {
     public function __construct(readonly protected BrandRepositoryInterface $brandRepository,
-                                readonly protected MediaRepositoryInterface $mediaRepository)
+                                readonly protected MediaRepositoryInterface $mediaRepository,
+                                readonly protected BrandFilter              $brandFilter)
     {
+    }
+
+    public function getBrandsWithFilters()
+    {
+        $queryParams = [
+            'q' => request()->q,
+            'status' => request()->status,
+        ];
+        $columns = [
+            'id',
+            'original_name',
+            'description',
+        ];
+        return $this->brandFilter->getByFilter($queryParams, 15, $columns);
     }
 
     public function store($request)
@@ -75,7 +91,7 @@ class BrandService
         } elseif (isset($brand) && !isset($deletedMedia) && isset($updatedMedia)) {
             return redirect(route('admin.brand.index'))->with('alert-success', 'برند شما با موفقیت ویرایش شد در فراید حذف تصویر قبلی از دیتابیس مشکلی بوجود آمده است!');
         } else {
-            return redirect(route('admin.brand.index'))->with('alert-error','متاسفانه خطایی بوجود آمده است');
+            return redirect(route('admin.brand.index'))->with('alert-error', 'متاسفانه خطایی بوجود آمده است');
         }
     }
 

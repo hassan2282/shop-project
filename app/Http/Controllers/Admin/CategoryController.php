@@ -21,7 +21,10 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = $this->categoryRepository->getAllCategoriesByFilters();
+        $categories = $this->categoryService->getByFilter();
+        if (is_null($categories)) {
+            $categories = $this->categoryRepository->allWithPaginate();
+        }
         return view('admin.category.index', compact('categories'));
     }
 

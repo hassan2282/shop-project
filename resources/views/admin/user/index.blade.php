@@ -32,7 +32,7 @@
                     @foreach ($users as $user)
                         <tr>
                             <th>{{ $user->id }}</th>
-                            <td>{{ $user->userName }}</td>
+                            <td>{{ $user->first_name }}</td>
                             <td>{{ $user->mobile }}</td>
 
                             @if ($user->mobile_verified_at == null)
@@ -48,7 +48,7 @@
                             <td class="text-danger">نیست</td>
                             @endif
 
-                            <td>{{ $user->slug }}</td>
+                            <td>{{ $user->slug}}</td>
 
 
 

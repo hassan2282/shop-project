@@ -63,8 +63,11 @@ class ProductFilter
     private function createQuery()
     {
         if ($this->searchKey) {
-            $this->query->where('name','like','%'. $this->searchKey .'%')
-                ->orWhere('id',$this->searchKey);
+            $this->query->where(function ($query){
+                $query->where('name','like','%'. $this->searchKey .'%')
+                    ->orWhere('id',$this->searchKey);
+            });
+
         }
         if ($this->status) {
             if ($this->status === 'active') {
