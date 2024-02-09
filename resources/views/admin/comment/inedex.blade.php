@@ -19,8 +19,8 @@
                     <input type="number" name="parent" value="{{\request()->parent}}" class="form-control" placeholder="آیدی والد">
                     <select class="form-select" name="status" aria-label="Default select example">
                         <option selected value="">فیلتر بر اساس وضعیت</option>
-                        <option value="active" >فعال</option>
-                        <option value="not_active">غیر فعال</option>
+                        <option value="active" {{request()->status === 'active' ? 'selected' : ''}}>فعال</option>
+                        <option value="not_active" {{request()->status === 'not_active' ? 'selected' : ''}}>غیر فعال</option>
                     </select>
                     <button class="btn btn-warning" type="submit">search</button>
                 </div>

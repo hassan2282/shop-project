@@ -52,12 +52,11 @@ class BaseFilter
     protected function createQuery()
     {
         if ($this->searchKey) {
-            $this->query->where (function ($query) {
+            $this->query->where(function ($query) {
                 foreach ($this->columns as $column) {
-                    $query->where ($column, 'LIKE', '%'. $this->searchKey. '%')
-                        ->orWhere ($column, 'LIKE', '%'. $this->searchKey. '%') ;
+                    $query->orWhere($column, 'LIKE', '%' . $this->searchKey . '%');
                 }
-            }) ;
+            });
         }
 
         if ($this->status) {

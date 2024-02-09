@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Filters\BrandFilter;
 use App\Filters\CommentFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CommentRequest;
@@ -10,6 +11,11 @@ use App\Models\Admin\Comment;
 
 class CommentController extends Controller
 {
+
+    public function __construct(readonly protected CommentFilter $commentFilter)
+    {
+    }
+
     public function index()
     {
         $queryParams = [
@@ -18,7 +24,12 @@ class CommentController extends Controller
             'author' => request()->author,
             'parent' => request()->parent
         ];
-        $comments = (new CommentFilter($queryParams, 15))->getResult();
+        $columns = [
+            'id',
+            'body',
+        ];
+        $comments = $this->commentFilter->getByFilter($queryParams, 15, $columns);
+//        $comments = (new CommentFilter($queryParams, 15))->getResult();
         return view('admin.comment.inedex', compact('comments'));
     }
 

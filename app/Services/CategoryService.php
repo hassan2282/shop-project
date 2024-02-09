@@ -21,8 +21,8 @@ class CategoryService
         ];
         $columns = [
             'id',
-            'name',
             'description',
+            'name',
         ];
         return $this->categoryFilter->getByFilter($queryParams, 15, $columns);
     }
