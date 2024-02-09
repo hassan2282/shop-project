@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
-    public function __construct(Product $product)
+    public function __construct(Product $product, readonly protected ProductFilter $productFilter)
     {
         parent::__construct($product);
     }
@@ -26,16 +26,21 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             'smaller' => request()->smaller,
             'bigger' => request()->bigger
         ];
-        return (new ProductFilter($queryParams, 15))->getResult();
+        $columns = [
+            'id',
+            'name',
+            'description'
+        ];
+        return $this->productFilter->getByFilter($queryParams, 15, $columns);
     }
 
     public function getCategories()
     {
-        return Category::get(['id','name']);
+        return Category::get(['id', 'name']);
     }
 
     public function getBrands()
     {
-        return Brand::get(['id','original_name']);
+        return Brand::get(['id', 'original_name']);
     }
 }

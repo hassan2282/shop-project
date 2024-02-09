@@ -17,6 +17,10 @@ class BaseFilter
     private $columns;
     private $author;
     private $parent;
+    private $brand;
+    private $category;
+    private $smaller;
+    private $bigger;
 
     public function __construct(Model $model)
     {
@@ -59,6 +63,22 @@ class BaseFilter
     {
         $this->parent = $this->extractKeyByKeyName('parent');
     }
+    private function extractBrand()
+    {
+        $this->brand = $this->extractKeyByKeyName('brand');
+    }
+    private function extractCategory()
+    {
+        $this->category = $this->extractKeyByKeyName('category');
+    }
+    private function extractSmaller()
+    {
+        $this->smaller = $this->extractKeyByKeyName('smaller');
+    }
+    private function extractBigger()
+    {
+        $this->bigger = $this->extractKeyByKeyName('bigger');
+    }
 
     protected function createQuery()
     {
@@ -98,6 +118,26 @@ class BaseFilter
             });
         }
 
+        //use for Product Filter
+        if ($this->brand) {
+            $this->query->whereHas('brand', function ($q){
+               $q->where('original_name','like','%'. $this->brand .'%');
+            });
+        }
+        //use for Product Filter
+        if ($this->category) {
+            $this->query->whereHas('category', function($q){
+               $q->where('name','like','%'. $this->category .'%');
+            });
+        }
+        //use for Product Filter
+        if ($this->smaller) {
+            $this->query->where('price','<', $this->smaller);
+        }
+        //use for Product Filter
+        if ($this->bigger) {
+            $this->query->where('price', '>', $this->bigger);
+        }
 
     }
 
@@ -112,6 +152,10 @@ class BaseFilter
         $this->extractStatus();
         $this->extractAuthor();
         $this->extractParent();
+        $this->extractBrand();
+        $this->extractCategory();
+        $this->extractSmaller();
+        $this->extractBigger();
         $this->createQuery();
         $this->fetchData();
     }
