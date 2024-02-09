@@ -2,6 +2,7 @@
 
 namespace App\Filters;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class BaseFilter
@@ -14,6 +15,8 @@ class BaseFilter
     private $status;
     private $result;
     private $columns;
+    private $author;
+    private $parent;
 
     public function __construct(Model $model)
     {
@@ -48,6 +51,14 @@ class BaseFilter
     {
         $this->status = $this->extractKeyByKeyName('status');
     }
+    private function extractAuthor()
+    {
+        $this->author = $this->extractKeyByKeyName('author');
+    }
+    private function extractParent()
+    {
+        $this->parent = $this->extractKeyByKeyName('parent');
+    }
 
     protected function createQuery()
     {
@@ -59,6 +70,7 @@ class BaseFilter
             });
         }
 
+        //use for all filter
         if ($this->status) {
             if ($this->status === 'active') {
                 $this->query->where('status', 1);
@@ -66,6 +78,26 @@ class BaseFilter
                 $this->query->where('status', 0);
             }
         }
+
+        //use for Comment filter
+        if ($this->author) {
+            $this->query->whereHas('user', function ($query){
+                $query->where('first_name','like','%'. $this->author .'%');
+            });
+        }
+
+        //use for Comment filter
+        if ($this->parent) {
+            $this->query->where(function ($query){
+            $query->where('parent_id', $this->parent)
+                ->orWhere(function ($q){
+                    $q->WhereHas('parent', function ($query) {
+                        $query->where('body','like','%'.$this->parent.'%');
+                    });
+                });
+            });
+        }
+
 
     }
 
@@ -78,6 +110,8 @@ class BaseFilter
     {
         $this->extractSearchKey();
         $this->extractStatus();
+        $this->extractAuthor();
+        $this->extractParent();
         $this->createQuery();
         $this->fetchData();
     }

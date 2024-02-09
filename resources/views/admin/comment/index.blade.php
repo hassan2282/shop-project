@@ -16,7 +16,7 @@
                 <div class="input-group">
                     <input type="search" name="q" value="{{\request()->q}}" class="form-control" placeholder="جست و جو ...">
                     <input type="search" name="author" value="{{\request()->author}}" class="form-control" placeholder="نویسنده">
-                    <input type="number" name="parent" value="{{\request()->parent}}" class="form-control" placeholder="آیدی والد">
+                    <input type="search" name="parent" value="{{\request()->parent}}" class="form-control" placeholder="آیدی والد">
                     <select class="form-select" name="status" aria-label="Default select example">
                         <option selected value="">فیلتر بر اساس وضعیت</option>
                         <option value="active" {{request()->status === 'active' ? 'selected' : ''}}>فعال</option>

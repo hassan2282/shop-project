@@ -29,8 +29,7 @@ class CommentController extends Controller
             'body',
         ];
         $comments = $this->commentFilter->getByFilter($queryParams, 15, $columns);
-//        $comments = (new CommentFilter($queryParams, 15))->getResult();
-        return view('admin.comment.inedex', compact('comments'));
+        return view('admin.comment.index', compact('comments'));
     }
 
     public function delete(Comment $comment)
