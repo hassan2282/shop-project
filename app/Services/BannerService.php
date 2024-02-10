@@ -8,8 +8,8 @@ use App\Models\Admin\Banner;
 use App\Repositories\Banner\BannerRepositoryInterface;
 use App\Repositories\Media\MediaRepositoryInterface;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class BannerService
 {
@@ -23,22 +23,23 @@ class BannerService
         $banner = $this->bannerRepository->create($bannerRequest->except('image'));
         if ($bannerRequest->hasFile('image')) {
             $file = $bannerRequest->file('image');
-            $image_name = time() . Str::random(20) . $file->getClientOriginalExtension();
+            $image_name = time() . Str::random(20) .'.'. $file->getClientOriginalExtension();
 
             if (getimagesize($file)[1] > 800) {
-                FFMpeg::open($file)
+                \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($file)
                     ->addFilter(['-s', '800x600'])
                     ->export()
                     ->toDisk('public')
-                    ->save('banners/' . $image_name);
+                    ->save('banners/'. $image_name);
             } else {
                 $file->storeAs('public/banners/', $image_name);
             }
-            FFMpeg::open($file)
+
+            \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($file)
                 ->addFilter(['-s', '300x240'])
                 ->export()
                 ->toDisk('public')
-                ->save('thumbnail/' . $image_name);
+                ->save('thumbnails/' . $image_name) ;
 
 
             $media = [
@@ -52,19 +53,44 @@ class BannerService
         }
     }
 
-    public function update(Banner $banner, BannerUpdateRequest $bannerRequest)
+    public function update(Banner $banner, BannerUpdateRequest $request)
     {
-        if ($bannerRequest->hasFile('image')) {
-            // delete file
-            File::delete(public_path($banner->image));
+        $this->bannerRepository->update($request->except('image'), $banner->id);
+        if ($request->hasFile('image')) {
+            if ($banner->media) {
+                $this->mediaRepository->delete($banner->media->id);
+                Storage::disk('public')->delete('banners/'. $banner->media->name);
+                Storage::disk('public')->delete('thumbnails/'. $banner->media->name);
+            }
+            $image = $request->file('image');
+            $image_name = Str::random(20) . '.' . $image->getClientOriginalExtension();
 
-            // update file
-            $file = $bannerRequest->file('image');
-            $saveImage->save($file, '/banners/');
-            $inputs['image'] = $saveImage->saveImageDb();
+            if (getimagesize($image)[1] > 800) {
+                \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($image)
+                    ->addFilter(['-s', '800x600'])
+                    ->export()
+                    ->toDisk('public')
+                    ->save('banners/'. $image_name);
+            } else {
+                $image->storeAs('public/banners/', $image_name);
+            }
+            \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($image)
+                ->addFilter(['-s', '300x200'])
+                ->export()
+                ->toDisk('public')
+                ->save('thumbnails/'. $image_name);
+
+            $media = [
+                'name' => $image_name,
+                'mimetype' => $image->getMimeType(),
+                'size' => $image->getSize(),
+                'mediable_type' => Banner::class,
+                'mediable_id' => $banner->id,
+            ];
+            $this->mediaRepository->create(attributes: $media);
+
         }
 
-        $banner->update($inputs);
     }
 
     public function status(Banner $banner)

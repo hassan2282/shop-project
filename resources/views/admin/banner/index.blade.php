@@ -33,7 +33,9 @@
                             <th>{{ $banner->id }}</th>
                             <td>{{ Str::limit($banner->url, 35, '...') }}</td>
                             <td>
-                                <img src="{{ asset($banner->image) }}" width="100" alt="{{ $banner->id }}">
+                                @if($banner->media)
+                                    <img src="{{ asset ('storage/thumbnails/' . $banner->media->name) }}" class="rounded-2 shadow-sm" height="50" width="100">
+                                @endif
                             </td>
 
 
