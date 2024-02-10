@@ -51,7 +51,7 @@
 
                             <td>
                                 @if ($brand->media)
-                                        <img width= "100" height= "50" src= "{{ asset ('storage/thumbnails/' . $brand->media->name) }}" >
+                                        <img width= "100" height= "50" class="rounded-2 shadow-sm" src= "{{ asset ('storage/thumbnails/' . $brand->media->name) }}" >
                                 @endif
                             </td>
 
