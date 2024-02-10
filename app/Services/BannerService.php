@@ -38,7 +38,7 @@ class BannerService
                 ->addFilter(['-s', '300x240'])
                 ->export()
                 ->toDisk('public')
-                ->save('banners/thumbnail/' . $image_name);
+                ->save('thumbnail/' . $image_name);
 
 
             $media = [

@@ -36,9 +36,9 @@ class Product extends Model
         return $this->belongsToMany(Attribute::class);
     }
 
-    public function attribute_values(): HasMany
+    public function attribute_values(): BelongsToMany
     {
-        return $this->HasMany(AttributeValue::class);
+        return $this->belongsToMany(AttributeValue::class);
     }
 
     public function media()

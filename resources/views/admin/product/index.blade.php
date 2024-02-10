@@ -38,7 +38,7 @@
                     <th>نام</th>
                     <th>برند</th>
                     <th>قیمت</th>
-                    <th>اسلاگ</th>
+                    <th>تصویر</th>
                     <th>دسته بندی</th>
                     <th>وضعیت</th>
                     <th>آپشن ها</th>
@@ -53,7 +53,11 @@
                         <td>{{ Str::limit($product->brand->original_name, 8)}}</td>
                         <td>{{ $product->price }}</td>
 
-                        <td>{{ Str::limit($product->slug, 8) }}</td>
+                        <td>
+                            @if ($product->media)
+                                <img width= "100" height= "50" src= "{{ asset ('storage/thumbnails/' . $product->media->name) }}" >
+                            @endif
+                        </td>
                         <td>{{ Str::limit($product->category->name, 8)}}</td>
 
                         @if ($product->status == 1)

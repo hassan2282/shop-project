@@ -11,7 +11,7 @@ class AttributeValue extends Model
 {
     use HasFactory;
     protected $table = 'attribute_values';
-    protected $fillable = ['value'];
+    protected $fillable = ['value','product_id'];
 
     public function attributes(): BelongsToMany
     {
