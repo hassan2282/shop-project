@@ -55,7 +55,7 @@
 
                         <td>
                             @if ($product->media)
-                                <img width= "100" height= "50" src= "{{ asset ('storage/thumbnails/' . $product->media->name) }}" >
+                                <img width= "100" height= "50" class="rounded-2 shadow-sm" src= "{{ asset ('storage/thumbnails/' . $product->media->name) }}" >
                             @endif
                         </td>
                         <td>{{ Str::limit($product->category->name, 8)}}</td>
