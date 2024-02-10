@@ -2,7 +2,8 @@
 
 namespace App\Repositories\Banner;
 
-interface BannerRepositoryInterface
-{
+use App\Repositories\EloquentRepositoryInterface;
 
+interface BannerRepositoryInterface extends EloquentRepositoryInterface
+{
 }

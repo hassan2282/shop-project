@@ -37,7 +37,20 @@ class BrandService
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $name = time() . Str::random(20) . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/brands/', $name);
+            if (getimagesize($file)[1] > 800) {
+                \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($file)
+                    ->addFilter(['-s', '800x600'])
+                    ->export()
+                    ->toDisk('public')
+                    ->save('brands/'. $name);
+            } else {
+                $file->storeAs('public/brands/', $name);
+            }
+            \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($file)
+                ->addFilter(['-s', '300x240'])
+                ->export()
+                ->toDisk('public')
+                ->save('thumbnails/'. $name);
 
             $media = [
                 'name' => $name,
@@ -69,9 +82,29 @@ class BrandService
         $brand = $this->brandRepository->update($attributes, $id);
         $targetBrand = $this->brandRepository->find($id);
         if ($request->hasFile('logo')) {
+            if ($targetBrand->media) {
+                $this->mediaRepository->delete($targetBrand->media->id);
+                Storage::disk('public')->delete('brands/'. $targetBrand->media->name);
+                Storage::disk('public')->delete('thumbnails/'. $targetBrand->media->name);
+            }
+
             $image = $request->file('logo');
             $image_name = Str::random(20) . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/brands/', $image_name);
+
+            if (getimagesize($image)[1] > 800) {
+                \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($image)
+                    ->addFilter(['-s', '800x600'])
+                    ->export()
+                    ->toDisk('public')
+                    ->save('brands/'. $image_name);
+            } else {
+                $image->storeAs('public/brands/', $image_name);
+            }
+            \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($image)
+                ->addFilter(['-s', '300x240'])
+                ->export()
+                ->toDisk('public')
+                ->save('thumbnails/'. $image_name);
 
             $media = [
                 'name' => $image_name,
@@ -80,9 +113,7 @@ class BrandService
                 'mediable_type' => Brand::class,
                 'mediable_id' => $targetBrand->id,
             ];
-            $deletedMedia = Storage::disk('public')->delete('brands/' . $targetBrand->media->name);
-            $targetMedia = $this->mediaRepository->where('mediable_id', $id);
-            $updatedMedia = $this->mediaRepository->update($media, $targetMedia[0]['id']);
+            $this->mediaRepository->create(attributes: $media);
         }
         if (isset($brand) && isset($deletedMedia) && isset($updatedMedia)) {
             return redirect(route('admin.brand.index'))->with('alert-success', 'برند شما با موفقیت ویرایش شد و تصویر جدید با موفقیت جایگزین تصویر قبل شد همراه با حذف تصویر قبل از دیتابیس!');

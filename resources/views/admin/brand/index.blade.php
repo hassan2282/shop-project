@@ -50,8 +50,8 @@
                             <td>{{ Str::limit($brand->description, 10, ' ...') }}</td>
 
                             <td>
-                                @if($brand->media)
-                                    <img width="100" height="50" src="{{ asset('storage/brands/' . $brand->media->name) }}">
+                                @if ($brand->media)
+                                        <img width= "100" height= "50" src= "{{ asset ('storage/thumbnails/' . $brand->media->name) }}" >
                                 @endif
                             </td>
 

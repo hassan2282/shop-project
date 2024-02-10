@@ -6,18 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Banner\BannerStoreRequest;
 use App\Http\Requests\Admin\Banner\BannerUpdateRequest;
 use App\Models\Admin\Banner;
+use App\Repositories\Banner\BannerRepositoryInterface;
+use App\Services\BannerService;
 use App\Services\SaveImage;
 use Illuminate\Support\Facades\File;
 
 class BannerController extends Controller
 {
-    public function index()
+    public function __construct(readonly protected BannerRepositoryInterface $bannerRepository,
+                                readonly protected BannerService             $bannerService)
     {
-        $banners = Banner::all();
-        return view('admin.banner.index', compact('banners'));
     }
 
-
+    public function index()
+    {
+        $banners = $this->bannerRepository->allWithPaginate();
+        return view('admin.banner.index', compact('banners'));
+    }
 
 
     public function create()
@@ -26,20 +31,11 @@ class BannerController extends Controller
     }
 
 
-
-    public function store(BannerStoreRequest $bannerRequest, SaveImage $saveImage)
+    public function store(BannerStoreRequest $bannerRequest)
     {
-        $inputs = $bannerRequest->all();
-
-        $file = $bannerRequest->file('image');
-        $saveImage->save($file, '/banners/');
-        $inputs['image'] = $saveImage->saveImageDb();
-
-        $banner = Banner::create($inputs);
+        $this->bannerService->create($bannerRequest);
         return redirect()->route('admin.banner.index')->with('alert-success', 'بنر شما با موفقیت اضافه شد!');
     }
-
-
 
 
     public function edit(Banner $banner)
@@ -48,44 +44,25 @@ class BannerController extends Controller
     }
 
 
-
-    public function update(Banner $banner, BannerUpdateRequest $bannerRequest, SaveImage $saveImage)
+    public function update(Banner $banner, BannerUpdateRequest $bannerRequest)
     {
-        $inputs = $bannerRequest->all();
-
-        if ($bannerRequest->hasFile('image')) {
-            // delete file
-            File::delete(public_path($banner->image));
-
-            // update file
-            $file = $bannerRequest->file('image');
-            $saveImage->save($file, '/banners/');
-            $inputs['image'] = $saveImage->saveImageDb();
-        }
-
-        $banner->update($inputs);
-
+        $this->bannerService->update($banner, $bannerRequest);
         return redirect()->route('admin.banner.index')->with('alert-success', 'بنر شما با موفقیت ویرایش شد!');
     }
 
 
     public function delete(Banner $banner)
     {
-        File::delete(public_path($banner->image));
-        $banner->delete();
+        $this->bannerService->delete($banner);
         return to_route('admin.banner.index')->with('alert-success', 'بنر شما با موفقیت حذف شد!');
     }
 
 
-
     public function status(Banner $banner)
     {
-        $banner->status = $banner->status == 1 ? 0 : 1;
-        $banner->save();
+        $this->bannerService->status($banner);
         return to_route('admin.banner.index')->with('alert-success', 'وضعیت بنر شما با موفقیت تغییر کرد !');
     }
-
-
 
 
 }

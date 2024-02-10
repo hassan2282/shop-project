@@ -6,6 +6,8 @@ use App\Repositories\Attribute\AttributeRepository;
 use App\Repositories\Attribute\AttributeRepositoryInterface;
 use App\Repositories\AttributeValue\AttributeValueRepository;
 use App\Repositories\AttributeValue\AttributeValueRepositoryInterface;
+use App\Repositories\Banner\BannerRepository;
+use App\Repositories\Banner\BannerRepositoryInterface;
 use App\Repositories\Brand\BrandRepositoryInterface;
 use App\Repositories\Brand\BrandRepository;
 use App\Repositories\Category\CategoryRepository;
@@ -29,6 +31,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MediaRepositoryInterface::class, MediaRepository::class);
         $this->app->bind(AttributeRepositoryInterface::class, AttributeRepository::class);
         $this->app->bind(AttributeValueRepositoryInterface::class, AttributeValueRepository::class);
+        $this->app->bind(BannerRepositoryInterface::class, BannerRepository::class);
     }
 
 }
