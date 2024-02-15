@@ -24,6 +24,7 @@
                     <tr>
                         <th>آیدی</th>
                         <th>نام</th>
+                        <th>توضیحات</th>
                         <th>آپشن ها</th>
                     </tr>
                 </thead>
@@ -33,7 +34,7 @@
                         <tr>
                             <th>{{ $permission->id }}</th>
                             <td>{{ $permission->name }}</td>
-
+                            <td>{{Str::limit($permission->description, 10 , ' ...')}}</td>
                             <td>
                                 <a href="{{ route('admin.permission.edit', $permission->id) }}"
                                     class="btn btn-sm rounded-pill btn-info waves-effect waves-light">ویرایش</a>

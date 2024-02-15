@@ -24,7 +24,16 @@
           </div>
         </div>
 
+          <div class="mb-3 row">
+              <label class="col-md-2 col-form-label">توضیحات</label>
+              <div class="col-md-10">
+                  <input class="form-control mb-2" name="description" type="text" placeholder="توضیحات را وارد کنید ..." value="{{ old('description') }}">
+                  @error('description')
+                  <span class="text-danger mt-3">{{ $message }}</span>
+                  @enderror
 
+              </div>
+          </div>
 
         <div class="m-auto float-end">
             <a href="{{ route('admin.permission.index') }}" class="btn btn-primary">بازگشت</a>
