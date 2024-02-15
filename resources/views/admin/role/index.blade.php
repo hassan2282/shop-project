@@ -24,6 +24,7 @@
                     <tr>
                         <th>آیدی</th>
                         <th>نام</th>
+                        <th>توضیحات</th>
                         <th>دسترسی نقش</th>
                         <th>آپشن ها</th>
                     </tr>
@@ -34,6 +35,7 @@
                         <tr>
                             <th>{{ $role->id }}</th>
                             <td>{{ $role->name }}</td>
+                            <td>{{ Str::limit($role->description, 15, ' ...') }}</td>
                             <td>
                                 @foreach ($role->permissions as $permission)
                                         <span>[ {{ $permission->name }} ]</span>

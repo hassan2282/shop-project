@@ -5,71 +5,63 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Role\RoleStoreRequest;
 use App\Http\Requests\Admin\Role\RoleUpdateRequest;
-use App\Models\Admin\Permission;
 use App\Models\Admin\Role;
+use App\Repositories\Permission\PermissionRepositoryInterface;
+use App\Repositories\Role\RoleRepositoryInterface;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 
 class RoleController extends Controller
 {
 
-
-
-    public function index()
+    public function __construct(readonly protected RoleRepositoryInterface       $roleRepository,
+                                readonly protected PermissionRepositoryInterface $permissionRepository)
     {
-        $roles = Role::Paginate(10);
+    }
+
+    public function index(): View
+    {
+        $roles = $this->roleRepository->allWithPaginate();
         return view('admin.role.index', compact('roles'));
     }
 
 
-
-    public function create()
+    public function create(): View
     {
-        $permissions = Permission::all();
+        $permissions = $this->permissionRepository->all();
         return view('admin.role.create', compact('permissions'));
     }
 
 
-
     public function store(RoleStoreRequest $request)
     {
-        $inputs = $request->all();
-
-        $role = Role::create($inputs);
-        $role->permissions()->sync($inputs['permissions']);
-
+        $role = $this->roleRepository->create($request->toArray());
+        $role->permissions()->sync($request['permissions']);
         return to_route('admin.role.index')->with('alert-success', 'نقش جدید با موفقیت ایجاد شد!');
     }
 
 
-
-    public function edit(Role $role)
+    public function edit(Role $role): View
     {
-        $permissions = Permission::all();
+        $permissions = $this->permissionRepository->all();
         return view('admin.role.edit', compact('role', 'permissions'));
     }
 
 
-
-    public function update(Role $role, RoleUpdateRequest $request)
+    public function update(Role $role, RoleUpdateRequest $request): RedirectResponse
     {
-        $inputs = $request->all();
-
-        $result = $role->update($inputs);
-        $role->permissions()->sync($inputs['permissions']);
-
+        $result = $this->roleRepository->update($request->toArray(),$role->id);
+        $role->permissions()->sync($request['permissions']);
         return to_route('admin.role.index')->with('alert-success', 'نقش شما با موفقیت ویرایش شد!');
     }
 
 
-
     public function delete(Role $role)
     {
-        $role->delete();
-
+        $this->roleRepository->delete($role->id);
         return back();
     }
-
-
 
 
 }

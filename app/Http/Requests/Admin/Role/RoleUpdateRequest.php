@@ -23,6 +23,7 @@ class RoleUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:5', 'max:20'],
+            'description' => ['required','min:5', 'max:255'],
             'permissions' => ['required', 'array']
         ];
     }
