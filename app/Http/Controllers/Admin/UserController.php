@@ -8,10 +8,17 @@ use App\Http\Requests\Admin\User\RoleCreateRequest;
 use App\Models\Admin\Permission;
 use App\Models\Admin\Role;
 use App\Models\User;
+use App\Repositories\Permission\PermissionRepositoryInterface;
+use App\Repositories\Role\RoleRepositoryInterface;
 
 
 class UserController extends Controller
 {
+    public function __construct(readonly protected PermissionRepositoryInterface $permissionRepository,
+                                readonly protected RoleRepositoryInterface       $roleRepository)
+    {
+    }
+
     public function index()
     {
         $users = User::Paginate(10);
@@ -25,15 +32,11 @@ class UserController extends Controller
     }
 
 
-
-
-
     public function permission(User $user)
     {
-        $permissions = Permission::all();
+        $permissions = $this->permissionRepository->all();
         return view('admin.user.permission', compact('user', 'permissions'));
     }
-
 
 
     public function permissionCreate(User $user, PermissionCreateRequest $request)
@@ -45,10 +48,9 @@ class UserController extends Controller
     }
 
 
-
     public function role(User $user)
     {
-        $roles = Role::all();
+        $roles = $this->roleRepository->all();
         return view('admin.user.role', compact('user', 'roles'));
     }
 
@@ -59,6 +61,12 @@ class UserController extends Controller
 
         $user->roles()->sync($inputs['roles']);
         return to_route('admin.user.index')->with('alert-success', 'نقش برای کاربر با موفقیت ایجاد شد😄!');
+    }
+
+    public function delete(User $user)
+    {
+        $user->delete();
+        return back();
     }
 
 }
