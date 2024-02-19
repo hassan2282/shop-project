@@ -33,7 +33,8 @@ class ProductFactory extends Factory
             'marketable' => fake()->randomElement([0,1]),
             'sold_number' => fake()->numerify('##'),
             'frozen_number' => fake()->numerify('##'),
-            'marketable_number' => fake()->numerify('##')
+            'marketable_number' => fake()->numerify('##'),
+            'published_at' => fake()->date(),
         ];
     }
 }
