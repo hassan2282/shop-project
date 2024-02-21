@@ -8,6 +8,7 @@ use App\Repositories\Brand\BrandRepositoryInterface;
 use App\Repositories\Media\MediaRepositoryInterface;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class BrandService
 {
@@ -38,19 +39,19 @@ class BrandService
             $file = $request->file('logo');
             $name = time() . Str::random(20) . '.' . $file->getClientOriginalExtension();
             if (getimagesize($file)[1] > 800) {
-                \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($file)
+                FFMpeg::open($file)
                     ->addFilter(['-s', '800x600'])
                     ->export()
                     ->toDisk('public')
-                    ->save('brands/'. $name);
+                    ->save('brands/' . $name);
             } else {
                 $file->storeAs('public/brands/', $name);
             }
-            \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($file)
+            FFMpeg::open($file)
                 ->addFilter(['-s', '300x240'])
                 ->export()
                 ->toDisk('public')
-                ->save('thumbnails/'. $name);
+                ->save('thumbnails/' . $name);
 
             $media = [
                 'name' => $name,
@@ -84,27 +85,27 @@ class BrandService
         if ($request->hasFile('logo')) {
             if ($targetBrand->media) {
                 $this->mediaRepository->delete($targetBrand->media->id);
-                Storage::disk('public')->delete('brands/'. $targetBrand->media->name);
-                Storage::disk('public')->delete('thumbnails/'. $targetBrand->media->name);
+                Storage::disk('public')->delete('brands/' . $targetBrand->media->name);
+                Storage::disk('public')->delete('thumbnails/' . $targetBrand->media->name);
             }
 
             $image = $request->file('logo');
             $image_name = Str::random(20) . '.' . $image->getClientOriginalExtension();
 
             if (getimagesize($image)[1] > 800) {
-                \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($image)
+                FFMpeg::open($image)
                     ->addFilter(['-s', '800x600'])
                     ->export()
                     ->toDisk('public')
-                    ->save('brands/'. $image_name);
+                    ->save('brands/' . $image_name);
             } else {
                 $image->storeAs('public/brands/', $image_name);
             }
-            \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::open($image)
+            FFMpeg::open($image)
                 ->addFilter(['-s', '300x240'])
                 ->export()
                 ->toDisk('public')
-                ->save('thumbnails/'. $image_name);
+                ->save('thumbnails/' . $image_name);
 
             $media = [
                 'name' => $image_name,
