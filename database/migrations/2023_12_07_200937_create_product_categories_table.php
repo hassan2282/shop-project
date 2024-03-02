@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->text('image')->nullable();
-            $table->tinyInteger('status')->default(0);
-            $table->text('slug')->unique()->nullable();
-            $table->tinyInteger('show_in_menu')->default(0);
-            $table->text('tags');
-            $table->foreignId('parent_id')->constrained('product_categories');
-            $table->softDeletes();
-            $table->timestamps();
-        });
+//        Schema::create('product_categories', function (Blueprint $table) {
+//            $table->id();
+//            $table->string('name');
+//            $table->text('description');
+//            $table->text('image')->nullable();
+//            $table->tinyInteger('status')->default(0);
+//            $table->text('slug')->unique()->nullable();
+//            $table->tinyInteger('show_in_menu')->default(0);
+//            $table->text('tags');
+//            $table->foreignId('parent_id')->constrained('product_categories');
+//            $table->softDeletes();
+//            $table->timestamps();
+//        });
     }
 
     /**

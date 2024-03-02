@@ -42,13 +42,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'slug' => 'string',
     ];
 
     public function sluggable(): array
     {
         return [
             'slug' => [
-                'source' => 'userName'
+                'source' => 'first_name'
             ]
         ];
     }
