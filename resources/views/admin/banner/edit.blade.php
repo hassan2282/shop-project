@@ -24,16 +24,13 @@
         </div>
 
 
-
-
-
         <div class="mb-3 row">
           <label for="status" class="col-md-2 col-form-label">انتخاب وضعیت بنر</label>
           <div class="col-md-10">
                 <select name="status" id="status" class="form-select mb-2">
                     <option  value="{{ null }}">انتخاب وضعیت</option>
-                    <option value="0">غیر فعال</option>
-                    <option value="1">فعال</option>
+                    <option value="0" {{request()->status == 0 ? 'selected' : '' }}>غیر فعال</option>
+                    <option value="1" {{request()->status == 1 ? 'selected' : '' }}>فعال</option>
                 </select>
                 @error('status')
                         <span class="text-danger mt-3">{{ $message }}</span>

@@ -15,6 +15,15 @@ class BannerTest extends TestCase
     /**
      * A basic feature test example.
      */
+    private function create_user()
+    {
+        return User::factory()->create();
+    }
+
+    private function create_banner()
+    {
+        return Banner::factory()->create();
+    }
     public function test_banner_controller_create(): void
     {
 
@@ -31,9 +40,7 @@ class BannerTest extends TestCase
     public function test_banner_send_data_with_post_method_work()
     {
 
-        $user = User::factory()->create();
-
-        Auth::loginUsingId($user->id);
+        $user = $this->create_user();
 
         $banner = [
             'url' => 'https://gemini.google.com/app/eb1fffbe76348599',
@@ -51,9 +58,8 @@ class BannerTest extends TestCase
 
     public function test_banner_index_view()
     {
-        $user = User::factory()->create();
-        Auth::loginUsingId($user->id);
-        $response = $this->get('/admin/banner');
+        $user = $this->create_user();
+        $response = $this->actingAs($user)->get('/admin/banner');
         $response->assertStatus(200);
         $response->assertSee('بنر ها');
         $response->assertViewHas('banners');
@@ -61,9 +67,19 @@ class BannerTest extends TestCase
 
     public function test_banner_edit()
     {
-        $response = $this->get('')
+        $user = $this->create_user();
+        $banner = $this->create_banner();
+        $response = $this->actingAs($user)->get('/admin/banner/edit/'. $banner->id);
+        $response->assertStatus(200);
+        $response->assertSee($banner->url);
     }
 
-
+    public function test_banner_delete()
+    {
+        $user = $this->create_user();
+        $banner = $this->create_banner();
+        $response = $this->actingAs($user)->delete('admin/banner/delete/', $banner->toArray());
+        $response->assertRedirectToRoute('admin.banner.index');
+    }
 
 }

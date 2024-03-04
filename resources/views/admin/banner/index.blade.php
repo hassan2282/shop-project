@@ -76,7 +76,7 @@
     </div>
 
     <div class="d-flex justify-content-center mt-5">
-        {{-- {{ $banners->links('pagination::bootstrap-5') }} --}}
+         {{ $banners->links('pagination::bootstrap-5') }}
     </div>
 
 @endsection
