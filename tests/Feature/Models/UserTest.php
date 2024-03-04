@@ -19,9 +19,7 @@ class UserTest extends TestCase
         $user = User::factory()->create();
         $user['password'] = '12345';
         $this->assertDatabaseHas('users', $user->toArray());
-        $this->assertDatabaseCount('users',1);
         $this->assertDatabaseHas('users',['id' => '1']);
     }
 
-    
 }

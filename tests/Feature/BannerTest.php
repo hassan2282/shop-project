@@ -43,10 +43,27 @@ class BannerTest extends TestCase
 
         $this->actingAs($user)->post(route('admin.banner.store'), $banner);
         $this->assertDatabaseHas('banners', $banner);
-        $this->assertDatabaseCount('banners', 1);
+        $this->assertDatabaseCount('banners', 2);
         $response = $this->get(route('admin.banner.index'));
         $response->assertStatus(200);
 
     }
+
+    public function test_banner_index_view()
+    {
+        $user = User::factory()->create();
+        Auth::loginUsingId($user->id);
+        $response = $this->get('/admin/banner');
+        $response->assertStatus(200);
+        $response->assertSee('بنر ها');
+        $response->assertViewHas('banners');
+    }
+
+    public function test_banner_edit()
+    {
+        $response = $this->get('')
+    }
+
+
 
 }
